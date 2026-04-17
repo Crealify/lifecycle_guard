@@ -1,4 +1,4 @@
-group = "com.example.lifecycle_guard_android"
+group = "com.crealify.lifecycle_guard_android"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -27,7 +27,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.lifecycle_guard_android"
+    namespace = "com.crealify.lifecycle_guard_android"
 
     compileSdk = 36
 
@@ -74,3 +74,4 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")
 }
+

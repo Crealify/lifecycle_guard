@@ -2,17 +2,18 @@ import Flutter
 import UIKit
 
 public class LifecycleGuardPlugin: NSObject, FlutterPlugin {
-  public static fun register(with registrar: FlutterPluginRegistrar) {
-    val channel = FlutterMethodChannel(name: "lifecycle_guard", binaryMessenger: registrar.messenger())
-    val instance = LifecycleGuardPlugin()
+  public static func register(with registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(name: "lifecycle_guard", binaryMessenger: registrar.messenger())
+    let instance = LifecycleGuardPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
-  public fun handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "startBackgroundSync":
-      // iOS background task scheduling logic would go here
-      // For now, just return success
+      // iOS background task scheduling logic
+      // For full implementation, register a BGProcessingTask in Info.plist
+      // and use BGTaskScheduler to schedule the actual work.
       result(nil)
     default:
       result(FlutterMethodNotImplemented)

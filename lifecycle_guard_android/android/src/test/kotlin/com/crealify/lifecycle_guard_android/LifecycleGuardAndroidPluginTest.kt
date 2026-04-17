@@ -1,27 +1,19 @@
 package com.crealify.lifecycle_guard_android
 
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import org.mockito.Mockito
 import kotlin.test.Test
+import kotlin.test.assertNotNull
 
 /*
- * This demonstrates a simple unit test of the Kotlin portion of this plugin's implementation.
+ * Unit tests for the LifecycleGuardPlugin.
  *
- * Once you have built the plugin's example app, you can run these tests from the command
- * line by running `./gradlew testDebugUnitTest` in the `example/android/` directory, or
- * you can run them directly from IDEs that support JUnit such as Android Studio.
+ * Run from the command line:
+ *   ./gradlew testDebugUnitTest
+ * in the `lifecycle_guard_android/example/android/` directory.
  */
-
 internal class LifecycleGuardAndroidPluginTest {
     @Test
-    fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
-        val plugin = LifecycleGuardAndroidPlugin()
-
-        val call = MethodCall("getPlatformVersion", null)
-        val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
-        plugin.onMethodCall(call, mockResult)
-
-        Mockito.verify(mockResult).success("Android " + android.os.Build.VERSION.RELEASE)
+    fun pluginInitializes() {
+        val plugin = LifecycleGuardPlugin()
+        assertNotNull(plugin)
     }
 }

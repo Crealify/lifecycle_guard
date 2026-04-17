@@ -1,5 +1,5 @@
 name: lifecycle_guard_platform_interface
-description: "A new Flutter package project."
+description: "Platform interface for lifecycle_guard - defines the contract for background execution."
 publish_to: none
 version: 0.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git

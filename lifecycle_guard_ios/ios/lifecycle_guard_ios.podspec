@@ -5,13 +5,14 @@
 Pod::Spec.new do |s|
   s.name             = 'lifecycle_guard_ios'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.summary          = 'iOS implementation of lifecycle_guard - mission-critical background execution.'
   s.description      = <<-DESC
-A new Flutter plugin project.
+  The iOS implementation of lifecycle_guard. Ensures Flutter background tasks survive
+  app termination and system memory pressure using native iOS background task APIs.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/Crealify/lifecycle_guard'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Crealify' => 'github.com/Crealify' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

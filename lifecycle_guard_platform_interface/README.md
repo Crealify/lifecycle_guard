@@ -1,39 +1,24 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# lifecycle_guard_platform_interface
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+The platform interface package for [`lifecycle_guard`](https://pub.dev/packages/lifecycle_guard).
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+This package defines the abstract `LifecycleGuardPlatform` class that all platform-specific implementations must extend. This enables the federated plugin pattern used by the Flutter team.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+This package is not intended to be imported directly by end users.
+Import `package:lifecycle_guard/lifecycle_guard.dart` instead.
+
+If you're building a platform implementation, implement `LifecycleGuardPlatform`:
 
 ```dart
-const like = 'sample';
+class MyPlatformLifecycleGuard extends LifecycleGuardPlatform {
+  @override
+  Future<void> startBackgroundSync(String taskId, Map<String, dynamic> data) async {
+    // Platform-specific implementation
+  }
+}
 ```
 
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## Repository
+[github.com/Crealify/lifecycle_guard](https://github.com/Crealify/lifecycle_guard)

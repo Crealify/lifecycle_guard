@@ -1,5 +1,5 @@
 name: lifecycle_guard_ios
-description: "A new Flutter plugin project."
+description: "iOS implementation of lifecycle_guard for mission-critical background execution."
 publish_to: none
 version: 0.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
