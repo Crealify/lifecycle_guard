@@ -1,5 +1,5 @@
 name: lifecycle_guard
-description: "A new Flutter package project."
+description: "A bulletproof Flutter plugin for mission-critical background execution."
 publish_to: none
 version: 0.0.1
 homepage:

@@ -1,3 +1,6 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial release of `lifecycle_guard`.
+* Federated architecture setup.
+* Android Foreground Service implementation.
+* iOS boilerplate implementation.
