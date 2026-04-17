@@ -1,15 +1,14 @@
 <div align="center">
 
-# 🛡️ lifecycle_guard_android
+# 🤖 lifecycle_guard_android
 
-**The Android implementation for mission-critical background execution.**
+**The bulletproof Android implementation for mission-critical background execution.**
 
-This package provides the Android-specific implementation of `lifecycle_guard`. It utilizes a robust Foreground Service with `dataSync` type to ensure tasks survive app termination and system optimizations.
+This package ensures your background tasks survive termination on Android devices using a robust Foreground Service architecture.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v0.0.2-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_android)
-[![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
+[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_android)
+[![Platform](https://img.shields.io/badge/Platform-Android-green)](https://pub.dev/packages/lifecycle_guard)
 
 </div>
 
@@ -19,22 +18,40 @@ This package provides the Android-specific implementation of `lifecycle_guard`. 
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
-  <p><i>Watch the Android Foreground Service protect your background tasks.</i></p>
 </div>
 
 ---
 
-## 🤖 Android Specifics
+## ⚙️ Android Native Setup
 
-- **Foreground Service**: Runs a persistent service to keep the process alive.
-- **Android 15+ Ready**: Fully compliant with `foregroundServiceType="dataSync"`.
-- **Notification**: Requires a persistent notification as per Android OS standards.
+For this plugin to work, you **must** add the following configuration to your `android/app/src/main/AndroidManifest.xml`.
+
+### 1. Permissions
+Add these permissions outside the `<application>` tag:
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+```
+
+### 2. Service Declaration
+Add this inside the `<application>` tag:
+
+```xml
+<service
+    android:name="com.crealify.lifecycle_guard_android.LifecycleService"
+    android:foregroundServiceType="dataSync"
+    android:exported="false">
+</service>
+```
 
 ---
 
-## 🚀 Usage
-
-This is an **Implementation** package. App developers should use the main [lifecycle_guard](https://pub.dev/packages/lifecycle_guard) package.
+## 🦾 Features (Android)
+- **Android 15+ Compliance**: Uses the required `dataSync` service type.
+- **Battery Optimization Override**: Helps tasks survive Doze Mode.
+- **Swipe-to-Kill Protection**: The service stays alive even if the user swipes the app away from the multitasking view.
 
 ---
 
@@ -46,8 +63,6 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 
 <div align="center">
 
-Built with ❤️ by [Crealify](https://github.com/Crealify) · Open to collaborate · PRs welcome
+Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
 
 </div>
-
-

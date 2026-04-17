@@ -8,11 +8,11 @@ Stop losing data when Android or iOS aggressively kills your app.
 `lifecycle_guard` ensures your background tasks survive termination, system reboots, and battery optimizations — guaranteed.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v0.0.2-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
-[![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
+[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
+[![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-support)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/CONTRIBUTING.md)
 
 </div>
 
@@ -21,7 +21,7 @@ Stop losing data when Android or iOS aggressively kills your app.
 ## 🎬 Demo
 
 <div align="center">
-  <img src="doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
+  <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
   <p><i>Watch lifecycle_guard in action: App swipe → Background survival → Task completion.</i></p>
 </div>
 
@@ -48,36 +48,18 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lifecycle_guard: ^0.0.1
+  lifecycle_guard: ^1.0.0
 ```
 
-Then run:
+### ⚙️ Platform-Specific Setup
 
-```sh
-flutter pub get
-```
+For production use, you **must** configure the native layer for each platform. Click below for detailed guides:
 
-### Android Setup
-
-Add the required permission and service declaration to your `android/app/src/main/AndroidManifest.xml`:
-
-```xml
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-<application>
-    <service
-        android:name="com.crealify.lifecycle_guard_android.LifecycleService"
-        android:foregroundServiceType="dataSync"
-        android:exported="false">
-    </service>
-</application>
-```
-
-### iOS Setup
-
-No additional configuration required for basic usage. For advanced background fetch, add the `BGTaskSchedulerPermittedIdentifiers` key to your `Info.plist`.
+| Platform | Setup Guide | Key Requirements |
+|---|---|---|
+| **Android** | [Android Guide](https://pub.dev/packages/lifecycle_guard_android) | Manifest Service, Notification Permissions |
+| **iOS** | [iOS Guide](https://pub.dev/packages/lifecycle_guard_ios) | Background Modes, Task Identifiers |
+| **Common** | [Interface Docs](https://pub.dev/packages/lifecycle_guard_platform_interface) | Internal Contract Details |
 
 ---
 
@@ -95,20 +77,6 @@ await LifecycleGuard.runSecureTask(
     "timestamp": DateTime.now().toIso8601String(),
   },
 );
-```
-
-### With Error Handling
-
-```dart
-try {
-  await LifecycleGuard.runSecureTask(
-    id: "upload_critical_report",
-    payload: {"reportId": "rpt_999"},
-  );
-  print("✅ Task dispatched to background guard.");
-} catch (e) {
-  print("❌ Failed to dispatch: $e");
-}
 ```
 
 ---
@@ -151,82 +119,14 @@ graph TD
 
 ---
 
-## 📋 Supported Scenarios
-
-| Scenario | Android | iOS |
-|---|:---:|:---:|
-| App swiped from recents | ✅ | ✅ |
-| Device enters Doze Mode | ✅ | ⚠️ Budget-limited |
-| Battery Saver enabled | ✅ | ✅ |
-| App force-stopped by user | ⚠️ Restarts on next boot | ❌ |
-| Large file uploads | ✅ | ✅ 30s budget |
-| Real-time data sync | ✅ | ✅ |
-
----
-
-## ⚠️ Important Caveats
-
-- **iOS**: Background execution is subject to the system's time "Budget" (typically 30 seconds per invocation).
-- **Android 13+**: A persistent notification is required by the OS for all Foreground Services. Your users will see it.
-- **Android 15+**: You **must** declare `foregroundServiceType="dataSync"` or the service will be rejected at launch.
-- **Emulators**: Always test background behavior on a **physical device**. Emulators do not replicate aggressive Doze Mode.
-
----
-
-## 🛠️ Platform Support
-
-| Android | iOS | Web | macOS | Linux | Windows |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-
-> Community PRs for macOS, Linux, and Windows support are very welcome! See [Contributing](#-contributing).
-
----
-
-## 🗺️ Roadmap
-
-- [ ] iOS `BGProcessingTask` auto-scheduler
-- [ ] Dart Isolate-based fallback for platforms without native support
-- [ ] Task queue with retry logic
-- [ ] `@pragma('vm:entry-point')` code generation helper
-- [ ] Linux / Windows / macOS support *(Community PRs welcome!)*
-
----
-
-## 🤝 Contributing
-
-This plugin is **open to collaboration**. If you've hit a native background execution edge case that we haven't handled, we want to hear from you.
-
-**Ways to contribute:**
-- 🐛 **Report Bugs** — Open a [GitHub Issue](https://github.com/Crealify/lifecycle_guard/issues)
-- 🔧 **Submit Fixes** — Open a [Pull Request](https://github.com/Crealify/lifecycle_guard/pulls)
-- 🌍 **Add a Platform** — Create a `lifecycle_guard_windows` or `lifecycle_guard_macos` package
-- 📖 **Improve Docs** — Even fixing a typo matters
-
-Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a PR.
-
----
-
 ## 📄 License
 
-BSD 3-Clause License — see [LICENSE](LICENSE) for details.
+BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
 
 ---
 
 <div align="center">
 
-## ⭐ Support This Project
-
-If `lifecycle_guard` saved you hours of debugging background crashes, or kept your users' data safe during app termination — **give it a star!**
-
-Every ⭐ helps more Flutter developers discover this tool and improves it for the whole community.
-
-**[⭐ Star on GitHub](https://github.com/Crealify/lifecycle_guard)**
-
----
-
-Built with ❤️ by [Crealify](https://github.com/Crealify) · Open to collaborate · PRs welcome
+Built with ❤️ by [Crealify](https://anil-bhattarai.com.np) · Open to collaborate · PRs welcome
 
 </div>
-
-

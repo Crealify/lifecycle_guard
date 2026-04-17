@@ -1,11 +1,11 @@
+# 1.0.0
+
+* Official Stable Release.
+* Enterprise-grade documentation and folder structure.
+* Production-ready background survival for Android 15 and iOS.
+* Branded under Crealify.
+
 # 0.0.2
 
-* Professional branding with official website integration.
-* Synchronized documentation across all platform packages.
-* Updated LICENSE and metadata for Crealify.
-* Stabilized background execution logic for Android 15 and iOS.
-
-# 0.0.1
-
-* Initial development preview.
+* Professional branding and documentation synchronization.
 

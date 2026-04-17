@@ -8,10 +8,11 @@ Stop losing data when Android or iOS aggressively kills your app.
 `lifecycle_guard` ensures your background tasks survive termination, system reboots, and battery optimizations — guaranteed.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v0.0.2-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
+[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-support)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/CONTRIBUTING.md)
 
 </div>
 
@@ -35,6 +36,7 @@ Stop losing data when Android or iOS aggressively kills your app.
 | 🍎 **iOS Compatible** | Bridges to Apple's native background task scheduler |
 | 📡 **Zero Data Loss** | Tasks continue even when users swipe the app away |
 | ⚡ **30-Second Setup** | One-line API — no complex native configuration needed |
+| 🔐 **User-Safe** | No auto-execution, no hidden scripts, everything is user-triggered |
 
 ---
 
@@ -46,10 +48,22 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lifecycle_guard: ^0.0.1
+  lifecycle_guard: ^1.0.0
 ```
 
-### Usage
+### ⚙️ Platform-Specific Setup
+
+For production use, you **must** configure the native layer for each platform. Click below for detailed guides:
+
+| Platform | Setup Guide | Key Requirements |
+|---|---|---|
+| **Android** | [Android Guide](https://pub.dev/packages/lifecycle_guard_android) | Manifest Service, Notification Permissions |
+| **iOS** | [iOS Guide](https://pub.dev/packages/lifecycle_guard_ios) | Background Modes, Task Identifiers |
+| **Common** | [Interface Docs](https://pub.dev/packages/lifecycle_guard_platform_interface) | Internal Contract Details |
+
+---
+
+## 💡 Usage
 
 ```dart
 import 'package:lifecycle_guard/lifecycle_guard.dart';
@@ -57,7 +71,11 @@ import 'package:lifecycle_guard/lifecycle_guard.dart';
 // Trigger a mission-critical background task
 await LifecycleGuard.runSecureTask(
   id: "sync_user_data",
-  payload: {"userId": "12345"},
+  payload: {
+    "userId": "12345",
+    "retry": true,
+    "timestamp": DateTime.now().toIso8601String(),
+  },
 );
 ```
 
@@ -65,9 +83,39 @@ await LifecycleGuard.runSecureTask(
 
 ## 🧠 How It Works
 
-`lifecycle_guard` uses a federated architecture to boot a native protected service (Android Foreground Service or iOS Background Task) that runs independently of your app's UI lifecycle.
+```mermaid
+graph TD
+    subgraph Flutter_Layer ["Flutter App (UI Thread)"]
+        A[LifecycleGuard.runSecureTask]
+    end
 
-Full technical details and architecture diagrams at [GitHub](https://github.com/Crealify/lifecycle_guard).
+    subgraph Native_Bridge ["MethodChannel Bridge"]
+        B{Platform Check}
+    end
+
+    subgraph Native_Layer ["Native Protection Layer"]
+        C[Android: LifecycleService<br/><i>Foreground + dataSync</i>]
+        D[iOS: BGTaskScheduler<br/><i>BGProcessingTask</i>]
+    end
+
+    A --> B
+    B -- Android --> C
+    B -- iOS --> D
+
+    subgraph Results ["Survival Benefits"]
+        E[✅ App Swipe Survival]
+        F[✅ Doze Mode Protection]
+        G[✅ Battery Saver Compliance]
+    end
+
+    C --> Results
+    D --> Results
+
+    style Flutter_Layer fill:#02569B,color:#fff,stroke:#fff
+    style Native_Layer fill:#2E7D32,color:#fff,stroke:#fff
+    style Native_Bridge fill:#333,color:#fff
+    style Results fill:#1b1f23,color:#3fb950,stroke:#3fb950
+```
 
 ---
 
@@ -79,8 +127,6 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 
 <div align="center">
 
-Built with ❤️ by [Crealify](https://github.com/Crealify) · Open to collaborate · PRs welcome
+Built with ❤️ by [Crealify](https://anil-bhattarai.com.np) · Open to collaborate · PRs welcome
 
 </div>
-
-

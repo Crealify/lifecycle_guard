@@ -1,15 +1,14 @@
 <div align="center">
 
-# 🛡️ lifecycle_guard_ios
+# 🍎 lifecycle_guard_ios
 
-**The iOS implementation for mission-critical background execution.**
+**The robust iOS implementation for mission-critical background execution.**
 
-This package provides the iOS-specific implementation of `lifecycle_guard`. It utilizes `BGTaskScheduler` to ensure tasks are given execution time even when the app is in the background or suspended.
+This package ensures your background tasks get the execution time they need on iOS devices using native `BGTaskScheduler` APIs.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v0.0.2-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_ios)
-[![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
+[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_ios)
+[![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey)](https://pub.dev/packages/lifecycle_guard)
 
 </div>
 
@@ -19,22 +18,36 @@ This package provides the iOS-specific implementation of `lifecycle_guard`. It u
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
-  <p><i>Watch iOS bridge to native background task schedulers.</i></p>
 </div>
 
 ---
 
-## 🍎 iOS Specifics
+## ⚙️ iOS Native Setup
 
-- **BGTaskScheduler**: Integrates with Apple's official background task management.
-- **Background Processing**: Requests dedicated background time for critical data sync.
-- **Budget-Limited**: Subject to iOS background execution time budgets.
+To allow background execution on iOS, you must configure your `Info.plist` and app capabilities.
+
+### 1. Enable Background Modes
+In Xcode, go to **Signing & Capabilities** -> **+ Capability** -> **Background Modes**.
+Check the following:
+- `Background fetch`
+- `Background processing`
+
+### 2. Info.plist Configuration
+Add the following keys to your `ios/Runner/Info.plist`:
+
+```xml
+<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>com.crealify.lifecycle_guard.background_task</string>
+</array>
+```
 
 ---
 
-## 🚀 Usage
-
-This is an **Implementation** package. App developers should use the main [lifecycle_guard](https://pub.dev/packages/lifecycle_guard) package.
+## 🦾 Features (iOS)
+- **BGTaskScheduler Integration**: Official Apple-recommended way for background work.
+- **Resource Management**: Respects iOS system budgets while ensuring critical data sync gets priority.
+- **Isolate Protection**: Boots a lightweight Dart Isolate to handle the task logic.
 
 ---
 
@@ -46,8 +59,6 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 
 <div align="center">
 
-Built with ❤️ by [Crealify](https://github.com/Crealify) · Open to collaborate · PRs welcome
+Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
 
 </div>
-
-
