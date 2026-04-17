@@ -1,6 +1,6 @@
 name: lifecycle_guard_ios
 description: "iOS implementation of lifecycle_guard for mission-critical background execution."
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
 homepage: https://anil-bhattarai.com.np
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  lifecycle_guard_platform_interface: ^0.0.1
+  lifecycle_guard_platform_interface: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +69,7 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
 
 
 

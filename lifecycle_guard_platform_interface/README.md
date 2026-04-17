@@ -7,7 +7,7 @@
 This package defines the glue that holds `lifecycle_guard` together across all platforms.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_platform_interface)
+[![pub version](https://img.shields.io/badge/pub-v1.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_platform_interface)
 
 </div>
 
@@ -47,3 +47,4 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
 
 </div>
+

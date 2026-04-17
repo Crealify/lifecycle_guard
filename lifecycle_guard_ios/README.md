@@ -7,7 +7,7 @@
 This package ensures your background tasks get the execution time they need on iOS devices using native `BGTaskScheduler` APIs.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Crealify-181717?logo=github)](https://github.com/Crealify/lifecycle_guard)
-[![pub version](https://img.shields.io/badge/pub-v1.0.0-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_ios)
+[![pub version](https://img.shields.io/badge/pub-v1.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard_ios)
 [![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey)](https://pub.dev/packages/lifecycle_guard)
 
 </div>
@@ -62,3 +62,4 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
 
 </div>
+
