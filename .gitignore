@@ -1,0 +1,45 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# Android
+.gradle/
+local.properties
+*.keystore
+*.jks
+*.properties
+**/android/app/key.properties
+**/android/local.properties
+**/android/GeneratedPluginRegistrant.java
+
+# iOS
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/DerivedData/
+**/ios/Pods/
+**/ios/.backups/
+**/ios/Runner/GeneratedPluginRegistrant.[mh]
+**/ios/Runner/GeneratedPluginRegistrant.swift
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+**/ios/ServiceDefinitions.json
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.history
+*.swp
+*~
+.DS_Store
