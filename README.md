@@ -20,9 +20,7 @@ Stop losing data when Android or iOS aggressively kills your app.
 ## 🎬 Demo
 
 <div align="center">
-  <video src="doc/lifecycle_guard_plugin_demo.mp4" width="100%" controls autoplay loop muted>
-    Your browser does not support the video tag.
-  </video>
+  <img src="doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
   <p><i>Watch lifecycle_guard in action: App swipe → Background survival → Task completion.</i></p>
 </div>
 
