@@ -2,7 +2,7 @@ name: lifecycle_guard_ios
 description: "A new Flutter plugin project."
 publish_to: none
 version: 0.0.1
-homepage:
+repository: https://github.com/Crealify/lifecycle_guard.git
 
 environment:
   sdk: ^3.11.4
