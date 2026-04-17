@@ -1,6 +1,5 @@
 name: lifecycle_guard_platform_interface
 description: "Platform interface for lifecycle_guard - defines the contract for background execution."
-publish_to: none
 version: 0.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
 
@@ -54,3 +53,4 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+

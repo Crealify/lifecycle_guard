@@ -1,6 +1,5 @@
 name: lifecycle_guard
 description: "A bulletproof Flutter plugin for mission-critical background execution."
-publish_to: none
 version: 0.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
 
@@ -66,3 +65,4 @@ dev_dependencies:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
