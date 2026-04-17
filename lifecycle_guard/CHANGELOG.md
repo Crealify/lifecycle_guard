@@ -1,6 +1,11 @@
-## 0.0.1
+# 0.0.2
 
-* Initial release of `lifecycle_guard`.
-* Federated architecture setup.
-* Android Foreground Service implementation.
-* iOS boilerplate implementation.
+* Professional branding with official website integration.
+* Synchronized documentation across all platform packages.
+* Updated LICENSE and metadata for Crealify.
+* Stabilized background execution logic for Android 15 and iOS.
+
+# 0.0.1
+
+* Initial development preview.
+
