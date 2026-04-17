@@ -5,7 +5,7 @@ repository: https://github.com/Crealify/lifecycle_guard.git
 
 environment:
   sdk: ^3.11.4
-  flutter: ">=1.17.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
