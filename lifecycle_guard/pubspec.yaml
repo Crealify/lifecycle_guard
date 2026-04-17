@@ -10,12 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  lifecycle_guard_platform_interface:
-    path: ../lifecycle_guard_platform_interface
-  lifecycle_guard_android:
-    path: ../lifecycle_guard_android
-  lifecycle_guard_ios:
-    path: ../lifecycle_guard_ios
+  lifecycle_guard_platform_interface: ^0.0.1
+  lifecycle_guard_android: ^0.0.1
+  lifecycle_guard_ios: ^0.0.1
 
 flutter:
   plugin:
