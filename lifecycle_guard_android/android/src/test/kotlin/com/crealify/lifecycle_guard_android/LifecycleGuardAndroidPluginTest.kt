@@ -1,4 +1,4 @@
-package com.example.lifecycle_guard_android
+package com.crealify.lifecycle_guard_android
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

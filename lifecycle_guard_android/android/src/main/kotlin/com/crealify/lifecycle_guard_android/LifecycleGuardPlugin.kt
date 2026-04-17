@@ -1,4 +1,4 @@
-package com.example.lifecycle_guard_android
+package com.crealify.lifecycle_guard_android
 
 import android.content.Context
 import android.content.Intent

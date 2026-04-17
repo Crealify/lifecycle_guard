@@ -1,4 +1,4 @@
-package com.example.lifecycle_guard_android_example
+package com.crealify.example
 
 import io.flutter.embedding.android.FlutterActivity
 
