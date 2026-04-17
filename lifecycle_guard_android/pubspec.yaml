@@ -2,6 +2,7 @@ name: lifecycle_guard_android
 description: "Android implementation of lifecycle_guard for mission-critical background execution."
 version: 0.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
+homepage: https://anil-bhattarai.com.np
 
 environment:
   sdk: ^3.11.4
@@ -69,4 +70,5 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
 
