@@ -1,95 +1,213 @@
-# lifecycle_guard 🛡️
+<div align="center">
 
-**Fix background app kills instantly.**
+# 🛡️ lifecycle_guard
 
-Stop losing critical data when Android or iOS aggressively kills your app. 
-`lifecycle_guard` ensures your background tasks survive termination, system reboots, and battery optimizations.
+**The bulletproof Flutter plugin for mission-critical background execution.**
+
+Stop losing data when Android or iOS aggressively kills your app.
+`lifecycle_guard` ensures your background tasks survive termination, system reboots, and battery optimizations — guaranteed.
+
+[![pub version](https://img.shields.io/badge/pub-v0.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
+[![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-support)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+</div>
+
+---
+
+## 🎬 Demo
+
+https://github.com/Crealify/lifecycle_guard/raw/main/doc/lifecycle_guard_plugin_demo.mp4
+
+> Watch how `lifecycle_guard` keeps a background sync running **even after the app is swiped away** from the multitasking view.
 
 ---
 
 ## ✨ Features
 
-✅ **Isolate Protection**: Boots a lightweight secondary engine for background tasks.
-✅ **Android 15+ Ready**: Compliant with new `dataSync` Foreground Service requirements.
-✅ **Zero Data Loss**: Ensures mission-critical syncs finish even if the user swipes the app away.
-✅ **One-Click Setup**: Clean, static API for 30-second integration.
-✅ **Native Stability**: Hardened Kotlin & Swift implementations.
+| Feature | Description |
+|---|---|
+| 🛡️ **Isolate Protection** | Boots a lightweight secondary engine so your task never shares the UI thread fate |
+| 🤖 **Android 15+ Ready** | Fully compliant with new `foregroundServiceType: dataSync` requirements |
+| 🍎 **iOS Compatible** | Bridges to Apple's native background task scheduler |
+| 📡 **Zero Data Loss** | Tasks continue even when users swipe the app away |
+| ⚡ **30-Second Setup** | One-line API — no complex native configuration needed |
+| 🔐 **User-Safe** | No auto-execution, no hidden scripts, everything is user-triggered |
 
-## 🎬 Demo
+---
 
-👉 **App force-closed?** → **Lifecycle Guard kicks in** → **Task finishes successfully.**
+## 🚀 Quick Start
 
-*(Add GIF here — this is critical for installs)*
+### Installation
 
-## ⚡ How It Works
-1. Call `LifecycleGuard.runSecureTask()`
-2. A transparent, professional notification appears (Android)
-3. Your background logic executes in a protected environment
-4. Task completes even if the UI process is terminated
+Add to your `pubspec.yaml`:
 
-## 🧠 Supported Scenarios (v1)
-- 🚀 Mission-critical database syncs
-- 🚀 Large file uploads/downloads
-- 🚀 Real-time location tracking guards
-- 🚀 Processing sensitive local data after app exit
+```yaml
+dependencies:
+  lifecycle_guard: ^0.0.1
+```
 
-## 💡 Example
-❌ **The Problem**
-User starts a sync → User swipes app away → **Task KILLED (Data lost)**
+Then run:
 
-✅ **The Fix**
+```sh
+flutter pub get
+```
+
+### Android Setup
+
+Add the required permission and service declaration to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+<application>
+    <service
+        android:name="com.crealify.lifecycle_guard_android.LifecycleService"
+        android:foregroundServiceType="dataSync"
+        android:exported="false">
+    </service>
+</application>
+```
+
+### iOS Setup
+
+No additional configuration required for basic usage. For advanced background fetch, add the `BGTaskSchedulerPermittedIdentifiers` key to your `Info.plist`.
+
+---
+
+## 💡 Usage
+
 ```dart
 import 'package:lifecycle_guard/lifecycle_guard.dart';
 
-void main() {
-  LifecycleGuard.runSecureTask(
-    id: "sync_001",
-    payload: {"retry": true}
+// Trigger a mission-critical background task
+await LifecycleGuard.runSecureTask(
+  id: "sync_user_data",
+  payload: {
+    "userId": "12345",
+    "retry": true,
+    "timestamp": DateTime.now().toIso8601String(),
+  },
+);
+```
+
+### With Error Handling
+
+```dart
+try {
+  await LifecycleGuard.runSecureTask(
+    id: "upload_critical_report",
+    payload: {"reportId": "rpt_999"},
   );
+  print("✅ Task dispatched to background guard.");
+} catch (e) {
+  print("❌ Failed to dispatch: $e");
 }
 ```
-**Result**: Sync survives the swipe and finishes in the background.
 
-## 🎯 Why Lifecycle Guard?
+---
 
-Background execution in Flutter is often:
-- Unreliable across different OS versions
-- Easily killed by battery savers
-- Hard to debug natively
+## 🧠 How It Works
 
-`lifecycle_guard` turns:
-❌ **Random app kills** ➡️ ✅ **Guaranteed background survival**
+```
+┌─────────────────────────────────────────────────────────┐
+│  Flutter App (UI Thread)                                │
+│                                                         │
+│  LifecycleGuard.runSecureTask(id: "sync")  ─────────┐  │
+└─────────────────────────────────────────────────────┼──┘
+                                                      │
+                                  MethodChannel Bridge │
+                                                      │
+┌─────────────────────────────────────────────────────▼──┐
+│  Native Layer                                          │
+│                                                        │
+│  Android → LifecycleService (Foreground + dataSync)    │
+│  iOS     → BGTaskScheduler (BGProcessingTask)          │
+│                                                        │
+│  ✅ Survives: App swipe, Doze Mode, Battery Saver      │
+└────────────────────────────────────────────────────────┘
+```
 
-## ⚠️ Important
-- Does not bypass OS security rules.
-- Requires user-triggered calls.
-- Designed for mission-critical tasks, not for persistent "vampire" background usage.
+---
 
-## 🛠️ Roadmap
-- [ ] iOS Background Fetch auto-scheduler
-- [ ] Linux/Windows support (Community PRs welcome!)
-- [ ] AI-assisted battery budget optimizer
+## 📋 Supported Scenarios
+
+| Scenario | Android | iOS |
+|---|:---:|:---:|
+| App swiped from recents | ✅ | ✅ |
+| Device enters Doze Mode | ✅ | ⚠️ Budget-limited |
+| Battery Saver enabled | ✅ | ✅ |
+| App force-stopped by user | ⚠️ Restarts on next boot | ❌ |
+| Large file uploads | ✅ | ✅ 30s budget |
+| Real-time data sync | ✅ | ✅ |
+
+---
+
+## ⚠️ Important Caveats
+
+- **iOS**: Background execution is subject to the system's time "Budget" (typically 30 seconds per invocation).
+- **Android 13+**: A persistent notification is required by the OS for all Foreground Services. Your users will see it.
+- **Android 15+**: You **must** declare `foregroundServiceType="dataSync"` or the service will be rejected at launch.
+- **Emulators**: Always test background behavior on a **physical device**. Emulators do not replicate aggressive Doze Mode.
+
+---
+
+## 🛠️ Platform Support
+
+| Android | iOS | Web | macOS | Linux | Windows |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+> Community PRs for macOS, Linux, and Windows support are very welcome! See [Contributing](#-contributing).
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] iOS `BGProcessingTask` auto-scheduler
+- [ ] Dart Isolate-based fallback for platforms without native support
+- [ ] Task queue with retry logic
+- [ ] `@pragma('vm:entry-point')` code generation helper
+- [ ] Linux / Windows / macOS support *(Community PRs welcome!)*
+
+---
 
 ## 🤝 Contributing
-Have a native edge case we should support?
-Open an issue or submit a PR!
 
-## ⭐ Support
-If this saved your data (and your sanity), give it a star ⭐
-It helps improve the tool for everyone.
+This plugin is **open to collaboration**. If you've hit a native background execution edge case that we haven't handled, we want to hear from you.
+
+**Ways to contribute:**
+- 🐛 **Report Bugs** — Open a [GitHub Issue](https://github.com/Crealify/lifecycle_guard/issues)
+- 🔧 **Submit Fixes** — Open a [Pull Request](https://github.com/Crealify/lifecycle_guard/pulls)
+- 🌍 **Add a Platform** — Create a `lifecycle_guard_windows` or `lifecycle_guard_macos` package
+- 📖 **Improve Docs** — Even fixing a typo matters
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a PR.
+
+---
+
+## 📄 License
+
+BSD 3-Clause License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🚀 DEMO SCRIPT (FOR YOUR GIF)
+<div align="center">
 
-🎬 **DEMO FLOW (Record this in 20-30 seconds)**
+## ⭐ Support This Project
 
-1.  **Scene 1 — The Problem**: Start a long task in a demo app. **Swipe the app away** in the multitasking view.
-2.  **Scene 2 — The Death**: Show the console logs stopping abruptly.
-3.  **Scene 3 — The Guard**: Re-open the app, call `LifecycleGuard.runSecureTask()`.
-4.  **Scene 4 — The Survival**: **Swipe the app away again.**
-5.  **Scene 5 — Magic Moment**: Show the **Android Notification** ("🛡️ Lifecycle Guard Active") staying visible while the console logs continue to scroll!
-6.  **Scene 6 — End**: Show the "✅ Sync Complete" log.
+If `lifecycle_guard` saved you hours of debugging background crashes, or kept your users' data safe during app termination — **give it a star!**
+
+Every ⭐ helps more Flutter developers discover this tool and improves it for the whole community.
+
+**[⭐ Star on GitHub](https://github.com/Crealify/lifecycle_guard)**
 
 ---
-**Repository**: [github.com/Crealify/lifecycle_guard](https://github.com/Crealify/lifecycle_guard)
+
+Built with ❤️ by [Crealify](https://github.com/Crealify) · Open to collaborate · PRs welcome
+
+</div>
