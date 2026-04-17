@@ -114,23 +114,38 @@ try {
 
 ## 🧠 How It Works
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  Flutter App (UI Thread)                                │
-│                                                         │
-│  LifecycleGuard.runSecureTask(id: "sync")  ─────────┐  │
-└─────────────────────────────────────────────────────┼──┘
-                                                      │
-                                  MethodChannel Bridge │
-                                                      │
-┌─────────────────────────────────────────────────────▼──┐
-│  Native Layer                                          │
-│                                                        │
-│  Android → LifecycleService (Foreground + dataSync)    │
-│  iOS     → BGTaskScheduler (BGProcessingTask)          │
-│                                                        │
-│  ✅ Survives: App swipe, Doze Mode, Battery Saver      │
-└────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Flutter_Layer ["Flutter App (UI Thread)"]
+        A[LifecycleGuard.runSecureTask]
+    end
+
+    subgraph Native_Bridge ["MethodChannel Bridge"]
+        B{Platform Check}
+    end
+
+    subgraph Native_Layer ["Native Protection Layer"]
+        C[Android: LifecycleService<br/><i>Foreground + dataSync</i>]
+        D[iOS: BGTaskScheduler<br/><i>BGProcessingTask</i>]
+    end
+
+    A --> B
+    B -- Android --> C
+    B -- iOS --> D
+
+    subgraph Results ["Survival Benefits"]
+        E[✅ App Swipe Survival]
+        F[✅ Doze Mode Protection]
+        G[✅ Battery Saver Compliance]
+    end
+
+    C --> Results
+    D --> Results
+
+    style Flutter_Layer fill:#02569B,color:#fff,stroke:#fff
+    style Native_Layer fill:#2E7D32,color:#fff,stroke:#fff
+    style Native_Bridge fill:#333,color:#fff
+    style Results fill:#1b1f23,color:#3fb950,stroke:#3fb950
 ```
 
 ---
