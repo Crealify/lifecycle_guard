@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>lifecycle_guard 🛡️ Demo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .header span { color: #58a6ff; }
+    .header p { color: #8b949e; font-size: 14px; margin-top: 6px; }
+
+    .demo-container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      width: 900px;
+    }
+
+    /* Phone mockup */
+    .phone {
+      width: 220px;
+      height: 440px;
+      background: #161b22;
+      border: 2px solid #30363d;
+      border-radius: 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+    .phone-notch {
+      width: 60px;
+      height: 20px;
+      background: #0d1117;
+      border-radius: 0 0 12px 12px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+    .phone-screen {
+      padding: 0 12px 12px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .app-ui {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .app-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1a73e8, #58a6ff);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .app-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e6edf3;
+    }
+    .sync-btn {
+      background: #1f6feb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+    .status-text {
+      font-size: 11px;
+      color: #8b949e;
+      text-align: center;
+    }
+
+    /* Notification bar */
+    .notification {
+      position: absolute;
+      top: 22px;
+      left: 8px;
+      right: 8px;
+      background: #1c2128;
+      border: 1px solid #388bfd;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(-60px);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(56, 139, 253, 0.3);
+    }
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .notif-icon { font-size: 18px; }
+    .notif-text { font-size: 10px; }
+    .notif-title { color: #58a6ff; font-weight: 700; }
+    .notif-body { color: #8b949e; }
+
+    /* Kill overlay */
+    .kill-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 30;
+      border-radius: 30px;
+    }
+    .kill-overlay.show { opacity: 1; }
+    .kill-icon { font-size: 36px; }
+    .kill-text { color: #f85149; font-weight: 700; font-size: 14px; }
+    .kill-sub { color: #8b949e; font-size: 11px; }
+
+    /* Terminal */
+    .terminal {
+      flex: 1;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .terminal-bar {
+      background: #21262d;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid #30363d;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #f85149; }
+    .dot-y { background: #d29922; }
+    .dot-g { background: #3fb950; }
+    .terminal-title { color: #8b949e; font-size: 12px; margin-left: 6px; font-family: 'JetBrains Mono', monospace; }
+
+    .terminal-body {
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      min-height: 380px;
+    }
+
+    .log-line {
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .log-line.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .log-cmd { color: #58a6ff; }
+    .log-info { color: #8b949e; }
+    .log-success { color: #3fb950; }
+    .log-error { color: #f85149; }
+    .log-warn { color: #d29922; }
+    .log-guard { color: #58a6ff; font-weight: 700; }
+
+    .scene-label {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 12px;
+      color: #8b949e;
+      font-family: 'JetBrains Mono', monospace;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .scene-label.show { opacity: 1; }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛡️ <span>lifecycle_guard</span> by Crealify</h1>
+  <p>Background tasks survive. Always.</p>
+</div>
+
+<div class="demo-container">
+  <!-- Phone -->
+  <div class="phone" id="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="app-ui">
+        <div class="app-icon">📡</div>
+        <div class="app-title">MyApp</div>
+        <button class="sync-btn" id="syncBtn">Start Background Sync</button>
+        <div class="status-text" id="statusText">Idle</div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+      <div class="notif-icon">🛡️</div>
+      <div class="notif-text">
+        <div class="notif-title">Lifecycle Guard Active</div>
+        <div class="notif-body">Securing task: sync_001</div>
+      </div>
+    </div>
+
+    <!-- Kill Overlay -->
+    <div class="kill-overlay" id="killOverlay">
+      <div class="kill-icon">💀</div>
+      <div class="kill-text">App Killed</div>
+      <div class="kill-sub">Task TERMINATED</div>
+    </div>
+  </div>
+
+  <!-- Terminal -->
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <div class="terminal-title">flutter — Android Device (Pixel 7)</div>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+    </div>
+  </div>
+</div>
+
+<div class="scene-label" id="sceneLabel"></div>
+
+<script>
+  const terminalBody = document.getElementById('terminalBody');
+  const notification = document.getElementById('notification');
+  const killOverlay = document.getElementById('killOverlay');
+  const sceneLabel = document.getElementById('sceneLabel');
+  const statusText = document.getElementById('statusText');
+
+  function setScene(text) {
+    sceneLabel.classList.remove('show');
+    setTimeout(() => {
+      sceneLabel.textContent = text;
+      sceneLabel.classList.add('show');
+    }, 200);
+  }
+
+  function addLog(text, cls, delay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const line = document.createElement('div');
+        line.className = `log-line ${cls}`;
+        line.innerHTML = text;
+        terminalBody.appendChild(line);
+        requestAnimationFrame(() => line.classList.add('show'));
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        resolve();
+      }, delay);
+    });
+  }
+
+  async function runDemo() {
+    // --- SCENE 1: WITHOUT GUARD ---
+    setScene('🔴 Scene 1: Without lifecycle_guard');
+    await addLog('<span class="log-cmd">$</span> flutter run --debug', 'log-info', 500);
+    await addLog('✓  Installing app...', 'log-success', 1200);
+    await addLog('✓  Syncing started: <span class="log-guard">sync_001</span>', 'log-success', 1800);
+    await addLog('<span class="log-info pulse">⏳ Uploading records... 0/500</span>', 'log-info', 2400);
+    statusText.textContent = 'Syncing...';
+    await addLog('⏳ Uploading records... 120/500', 'log-info', 3000);
+    await addLog('⏳ Uploading records... 280/500', 'log-info', 3600);
+
+    // Kill scene
+    setTimeout(() => {
+      setScene('☠️  User swipes app away (No Guard)');
+      killOverlay.classList.add('show');
+    }, 4200);
+
+    await addLog('<span class="log-error">✗ Process killed by OS (Doze Mode)</span>', 'log-error', 4600);
+    await addLog('<span class="log-error">✗ Task TERMINATED — 280 records LOST</span>', 'log-error', 5000);
+    statusText.textContent = '❌ 280 records LOST';
+
+    setTimeout(() => killOverlay.classList.remove('show'), 5800);
+
+    // --- SCENE 2: WITH GUARD ---
+    setTimeout(async () => {
+      // Clear logs
+      terminalBody.innerHTML = '';
+      statusText.textContent = 'Idle';
+      setScene('🟢 Scene 2: With lifecycle_guard');
+
+      await addLog('<span class="log-cmd">$</span> flutter run --debug', 'log-info', 200);
+      await addLog('✓  Installing app...', 'log-success', 900);
+      await addLog('<span class="log-guard">🛡️ LifecycleGuard.runSecureTask(id: "sync_001")</span>', 'log-guard', 1500);
+      await addLog('✓  Foreground Service bound (dataSync)', 'log-success', 2000);
+      notification.classList.add('show');
+      statusText.textContent = '🛡️ Guarded';
+      await addLog('✓  Syncing started: <span class="log-guard">sync_001</span>', 'log-success', 2600);
+      await addLog('⏳ Uploading records... 0/500', 'log-info', 3200);
+      await addLog('⏳ Uploading records... 120/500', 'log-info', 3800);
+      await addLog('⏳ Uploading records... 280/500', 'log-info', 4400);
+
+      // Kill attempt
+      setTimeout(() => {
+        setScene('☠️  User swipes app away (With Guard)');
+        killOverlay.style.background = 'rgba(0,0,0,0.5)';
+        killOverlay.innerHTML = '<div class="kill-icon">⚠️</div><div class="kill-text" style="color:#d29922">App UI Killed</div><div class="kill-sub">Guard Still Active...</div>';
+        killOverlay.classList.add('show');
+      }, 5000);
+
+      await addLog('<span class="log-warn">⚠  UI process closed by user</span>', 'log-warn', 5400);
+      await addLog('<span class="log-guard">🛡️ LifecycleService continues in background</span>', 'log-guard', 5900);
+      await addLog('⏳ Uploading records... 380/500', 'log-info', 6500);
+      await addLog('⏳ Uploading records... 460/500', 'log-info', 7100);
+
+      setTimeout(() => killOverlay.classList.remove('show'), 7200);
+
+      await addLog('⏳ Uploading records... 500/500', 'log-info', 7700);
+      await addLog('<span class="log-success">✅ Sync COMPLETE — 500/500 records saved!</span>', 'log-success', 8200);
+      notification.classList.remove('show');
+      statusText.textContent = '✅ 500 records SAVED';
+      setScene('✅ lifecycle_guard — Background tasks survive. Always.');
+
+      // Loop
+      setTimeout(() => runDemo(), 5000);
+    }, 7000);
+  }
+
+  setTimeout(runDemo, 800);
+</script>
+</body>
+</html>
