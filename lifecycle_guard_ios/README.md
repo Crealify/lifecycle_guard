@@ -16,9 +16,9 @@ This package ensures your background tasks get the execution time they need on i
 
 ---
 
-## 🚀 Why this package?
-iOS is extremely strict about background execution. Once a user minimizes or swipes an app away, the process is suspended almost immediately.
-`lifecycle_guard_ios` bridges to the **BGTaskScheduler** API, allowing your app to register "Background Processing Tasks" that Apple's kernel will prioritize and execute even when the app is terminated.
+## 🚀 The iOS Challenge
+iOS is notoriously strict. When an app is swiped away or minimized, it is suspended almost instantly. Unlike Android, you cannot simply start a persistent "service."
+`lifecycle_guard_ios` utilizes Apple's **BGTaskScheduler** framework to request dedicated processing time from the kernel. This allows your app to finish critical work (like a database sync) even if the UI process has been suspended or terminated.
 
 ---
 
@@ -32,16 +32,16 @@ dependencies:
 ```
 
 ### 2. Configure Capabilities (Xcode)
-To allow background execution on iOS, you must enable specific capabilities:
+To allow background execution on iOS, you **must** enable specific capabilities in Xcode:
 1.  Open your project in **Xcode**.
-2.  Select your target and go to **Signing & Capabilities**.
-3.  Click **+ Capability** and add **Background Modes**.
+2.  Select the **Runner** target and go to **Signing & Capabilities**.
+3.  Click **+ Capability** and search for **Background Modes**.
 4.  Check the following two boxes:
     - `Background fetch`
-    - `Background processing`
+    - `Background processing` (This is critical for long tasks)
 
 ### 3. Update Info.plist
-You must register the task identifier so the system knows which tasks to allow. Open `ios/Runner/Info.plist` and add:
+Apple requires you to whitelist your background task identifiers. Open `ios/Runner/Info.plist` and add:
 
 ```xml
 <key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -52,39 +52,55 @@ You must register the task identifier so the system knows which tasks to allow. 
 
 ---
 
-## 💡 Full Example Code (iOS-Ready)
+## 💡 Full Example Code (Complete `main.dart`)
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:lifecycle_guard_ios/lifecycle_guard_ios.dart';
 
 void main() {
-  // Ensure Flutter is ready for native calls
+  // 1. Initialize Flutter bindings for native channel support
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MaterialApp(home: IOSGuardDemo()));
+  runApp(const MaterialApp(home: IOSGuardExample()));
 }
 
-class IOSGuardDemo extends StatelessWidget {
-  const IOSGuardDemo({super.key});
+class IOSGuardExample extends StatelessWidget {
+  const IOSGuardExample({super.key});
 
-  Future<void> _startIOSTask() async {
-    // 🛡️ Register the Background Processing Task
-    // This tells iOS to schedule a processing window for your task
-    await LifecycleGuardIos().runSecureTask(
-      id: "sync_records_ios",
-      payload: {"priority": "high"},
-    );
-    print("iOS BGTask scheduled!");
+  /// This function requests background processing time from iOS
+  Future<void> _triggerIosTask() async {
+    try {
+      // 🛡️ Register the task with BGTaskScheduler
+      // iOS will then allocate a window for your task to run.
+      await LifecycleGuardIos().runSecureTask(
+        id: "ios_sync_001",
+        payload: {
+          "user": "developer_pro",
+          "action": "secure_data_upload",
+        },
+      );
+      debugPrint("iOS Guard scheduled: Your task is now protected.");
+    } catch (e) {
+      debugPrint("Failed to schedule iOS task: $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('iOS Lifecycle Guard')),
+      appBar: AppBar(title: const Text('iOS Background Guard')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: _startIOSTask,
-          child: const Text('Schedule Background Task'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.apple, size: 80),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _triggerIosTask,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
+              child: const Text('Request Background Processing'),
+            ),
+          ],
         ),
       ),
     );
@@ -94,10 +110,11 @@ class IOSGuardDemo extends StatelessWidget {
 
 ---
 
-## 🦾 Features (iOS)
-- **BGTaskScheduler Integration**: Official Apple-recommended way for background work.
-- **Resource Management**: Respects iOS system budgets while ensuring critical data sync gets priority.
-- **Isolate Protection**: Boots a lightweight Dart Isolate to handle the task logic.
+## 🦾 iOS Specific Features
+- **BGTaskScheduler Integration**: Follows the official Apple architecture for background work.
+- **Isolate Protection**: Spawns a dedicated background Isolate to keep your Dart logic running.
+- **Resource Management**: Automatically respects iOS system battery and data budgets.
+- **Graceful Termination Handling**: Provides hooks to save state if iOS finally decides to reclaim resources.
 
 ---
 
