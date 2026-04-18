@@ -49,73 +49,68 @@ By bridging to native Foreground Services (Android) and Background Processing Ta
 
 ---
 
-## 📦 Installation
+## 📦 Step-by-Step Installation
 
-Add to your `pubspec.yaml`:
-
+### 1. Add to dependencies
+Add this to your `pubspec.yaml`:
 ```yaml
 dependencies:
   lifecycle_guard: ^1.0.1
 ```
 
----
+### 2. Platform Setup (REQUIRED)
+You **must** configure the native layer for the guard to hold. 
 
-## ⚙️ Platform-Specific Setup (REQUIRED)
-
-For the "Guard" to hold, you **must** configure the native layer.
-
-### 🤖 Android Setup
-Add the following to your `android/app/src/main/AndroidManifest.xml`:
-
-```xml
-<!-- 1. Permissions -->
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-<application ...>
-    <!-- 2. Service Declaration -->
+#### 🤖 Android Configuration
+Open `android/app/src/main/AndroidManifest.xml`:
+1.  **Add Permissions** (outside `<application>`):
+    ```xml
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    ```
+2.  **Declare Service** (inside `<application>`):
+    ```xml
     <service
         android:name="com.crealify.lifecycle_guard_android.LifecycleService"
         android:foregroundServiceType="dataSync"
         android:exported="false">
     </service>
-</application>
-```
+    ```
 
-### 🍎 iOS Setup
-1.  **Capabilities**: Open Xcode -> Signing & Capabilities -> **Background Modes**. Check:
-    - `Background fetch`
-    - `Background processing`
-2.  **Info.plist**: Add the background task identifier:
-```xml
-<key>BGTaskSchedulerPermittedIdentifiers</key>
-<array>
-    <string>com.crealify.lifecycle_guard.background_task</string>
-</array>
-```
+#### 🍎 iOS Configuration
+1.  **Xcode Capabilities**: Enable **Background Modes** and check `Background fetch` & `Background processing`.
+2.  **Info.plist**: Register the task identifier:
+    ```xml
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.crealify.lifecycle_guard.background_task</string>
+    </array>
+    ```
 
 ---
 
-## 💡 Full Example Code
-Here is a complete `main.dart` that you can copy-paste to see `lifecycle_guard` in action.
+## 💡 Full Copy-Paste Example
+A complete `main.dart` showing a button that triggers a protected task.
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:lifecycle_guard/lifecycle_guard.dart';
 
 void main() {
+  // 1. Ensure Flutter bindings are ready
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MaterialApp(home: GuardExample()));
 }
 
 class GuardExample extends StatelessWidget {
   const GuardExample({super.key});
 
-  // This is the task that will survive app termination
+  // 2. This function triggers the protection
   Future<void> _triggerSecureTask() async {
     try {
       // 🛡️ The 'Guard' boots here. 
-      // Even if you swipe the app away after this call, the task completes.
+      // After this call, you can swipe the app away and the task will continue.
       await LifecycleGuard.runSecureTask(
         id: "sync_records_001",
         payload: {
@@ -124,9 +119,12 @@ class GuardExample extends StatelessWidget {
           "timestamp": DateTime.now().toIso8601String(),
         },
       );
-      print("Task successfully handed off to the Guard!");
+      
+      // The code below continues to run in a protected state
+      debugPrint("Guard is active. You can now close the app.");
+      
     } catch (e) {
-      print("Failed to start guard: $e");
+      debugPrint("Failed to start guard: $e");
     }
   }
 
@@ -141,15 +139,18 @@ class GuardExample extends StatelessWidget {
             const Icon(Icons.security, size: 80, color: Colors.blue),
             const SizedBox(height: 20),
             const Text(
-              'Click below, then swipe your app away!',
+              'Click the button, then swipe the app away\nfrom the multitasking view!',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _triggerSecureTask,
-              style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
-              child: const Text('Start Secure Background Task'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              child: const Text('Start Protected Background Task'),
             ),
           ],
         ),
