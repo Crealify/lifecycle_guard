@@ -4,302 +4,287 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="guard_icon.png">
-    <title>iOS Lifecycle Guard | Interactive Demo</title>
+    <title>iOS Demo | lifecycle_guard</title>
     <style>
         :root {
+            --bg: #090c12;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
             --primary: #007aff;
-            --bg: #f2f2f7;
-            --card: #ffffff;
-            --border: #d1d1d6;
-            --text: #000000;
-            --text-muted: #8e8e93;
+            --secondary: #3fb950;
+            --error: #f85149;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
         }
 
         body {
-            background-color: #000;
+            background-color: var(--bg);
             color: var(--text);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            padding: 60px 20px;
+            overflow-x: hidden;
         }
 
-        .phone {
-            width: 320px;
-            height: 640px;
+        /* Top Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-logo img { width: 32px; height: 32px; }
+        .header-logo h1 { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; }
+        .header-logo h1 span { color: var(--text-muted); font-weight: 400; }
+        .tagline { color: var(--text-muted); font-size: 14px; }
+
+        /* Layout Container */
+        .demo-container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            max-width: 1100px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Phone Styling */
+        .phone-frame {
+            width: 300px;
+            height: 600px;
             background: #fff;
             border: 12px solid #000;
             border-radius: 50px;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .screen {
-            flex: 1;
-            background: var(--bg);
-            padding: 24px;
+        .phone-screen {
+            height: 100%;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-        }
-
-        .header {
-            display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 32px;
+            text-align: center;
+            background: #f2f2f7;
         }
 
-        .logo-box {
-            width: 44px;
-            height: 44px;
+        .app-icon-large {
+            width: 64px;
+            height: 64px;
             background: #000;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 60px 0 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
+        .app-name { font-weight: 700; font-size: 18px; margin-bottom: 40px; color: #000; }
 
-        .ios-badge {
-            font-size: 9px;
+        .btn-sync {
+            width: 100%;
             background: #007aff;
-            color: #fff;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .hero-text {
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -1px;
-        }
-
-        .status-card {
-            background: var(--card);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .status-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .status-value {
-            font-size: 15px;
-            font-weight: 700;
-            color: #000;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: #fff;
+            color: white;
             border: none;
             padding: 16px;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            margin-top: auto;
+            transition: all 0.2s;
         }
 
-        .ios-banner {
-            position: absolute;
-            top: -100px;
-            left: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: 100;
-        }
+        .btn-sync:active { transform: scale(0.96); }
+        .btn-sync:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .ios-banner.show {
-            top: 20px;
-        }
-
-        .app-icon {
-            width: 32px;
-            height: 32px;
-            background: #000;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .banner-text h4 {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .banner-text p {
+        .syncing-text {
+            margin-top: 16px;
             font-size: 12px;
-            color: #333;
-        }
-
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 32px;
-            text-align: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s;
-            z-index: 200;
-        }
-
-        .overlay.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .ios-terminal {
-            background: #f2f2f7;
-            border: 1px solid #d1d1d6;
-            padding: 16px;
-            border-radius: 14px;
-            width: 100%;
-            font-family: 'SF Mono', 'Courier', monospace;
-            font-size: 11px;
-            color: #007aff;
-            margin-top: 32px;
-            text-align: left;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin-right: 8px;
+            color: #8e8e93;
             display: none;
         }
 
-        .active .pulse-dot {
-            display: inline-block;
-            animation: ios-pulse 1.5s infinite;
+        /* Terminal Styling */
+        .terminal-window {
+            flex: 1;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 600px;
         }
 
-        @keyframes ios-pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
+        .terminal-header {
+            background: #161b22;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .traffic-lights { display: flex; gap: 8px; margin-right: 20px; }
+        .light { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+        .terminal-title { color: var(--text-muted); font-size: 12px; flex: 1; text-align: center; margin-right: 40px; }
+
+        .terminal-body {
+            padding: 24px;
+            font-family: 'SF Mono', 'Courier', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-y: auto;
+        }
+
+        .log-line { margin-bottom: 8px; opacity: 0; transform: translateX(-10px); transition: all 0.3s; }
+        .log-line.show { opacity: 1; transform: translateX(0); }
+        .prompt { color: var(--primary); margin-right: 8px; }
+        .success { color: var(--secondary); }
+        .error-msg { color: var(--error); }
+
+        /* Bottom Badge */
+        .status-badge {
+            margin-top: 60px;
+            background: #161b22;
+            border: 1px solid var(--border);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-red { background: var(--error); box-shadow: 0 0 10px var(--error); }
+
+        @media (max-width: 850px) {
+            .demo-container { flex-direction: column; align-items: center; }
+            .terminal-window { width: 100%; height: 350px; }
+            body { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="phone">
-        <div id="banner" class="ios-banner">
-            <div class="app-icon">
-                <img src="guard_icon.png" width="20" alt="Guard">
-            </div>
-            <div class="banner-text">
-                <h4>Lifecycle Guard</h4>
-                <p>Background Processing: Active</p>
+
+    <div class="page-header">
+        <div class="header-logo">
+            <img src="guard_icon.png" alt="Guard">
+            <h1>lifecycle_guard <span>by Crealify</span></h1>
+        </div>
+        <p class="tagline">Background tasks survive. Always.</p>
+    </div>
+
+    <div class="demo-container">
+        <!-- Phone UI -->
+        <div class="phone-frame">
+            <div class="phone-screen">
+                <div style="font-size: 10px; color: #888; width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <span>9:41</span>
+                    <span>iPhone 15 Pro</span>
+                </div>
+                
+                <div class="app-icon-large">
+                    <img src="guard_icon.png" width="32" alt="App">
+                </div>
+                <div class="app-name">MyApp</div>
+
+                <button id="btn-sync" class="btn-sync" onclick="startDemo()">Start Background Sync</button>
+                <div id="sync-status" class="syncing-text">Syncing...</div>
             </div>
         </div>
 
-        <div class="screen">
-            <div class="header">
-                <div class="logo-box">
-                    <img src="guard_icon.png" width="26" alt="Guard">
+        <!-- Terminal UI -->
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="traffic-lights">
+                    <div class="light red"></div>
+                    <div class="light yellow"></div>
+                    <div class="light green"></div>
                 </div>
-                <div>
-                    <h1>iOS Guard</h1>
-                    <span class="ios-badge">BGTask Ready</span>
-                </div>
+                <div class="terminal-title">flutter — iOS (iPhone 15 Pro)</div>
             </div>
-
-            <div class="hero-text">
-                Apple background scheduler integration.
+            <div id="terminal" class="terminal-body">
+                <div class="log-line show"><span class="prompt">$</span> flutter run</div>
+                <div class="log-line show success">✓ App installed on iPhone 15 Pro</div>
+                <div class="log-line show">▶ User ready to test...</div>
             </div>
-
-            <div id="card" class="status-card">
-                <p class="status-label">API: BGTaskScheduler</p>
-                <div style="display: flex; align-items: center;">
-                    <span class="pulse-dot"></span>
-                    <p id="status" class="status-value">Ready</p>
-                </div>
-            </div>
-
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-                Simulating how Lifecycle Guard uses <b>Background Processing Tasks</b> to request additional execution time from iOS.
-            </p>
-
-            <button id="btn" class="btn" onclick="startDemo()">Schedule iOS Task</button>
-        </div>
-
-        <div id="overlay" class="overlay">
-            <h2 style="font-size: 24px; margin-bottom: 12px; letter-spacing: -0.5px;">App Suspended</h2>
-            <p style="color: #666; font-size: 15px;">Application pushed to background.</p>
-            
-            <div class="ios-terminal">
-                [System] App moved to background...<br>
-                [Guard] beginBackgroundTaskWithName...<br>
-                [Status] ID: 12948 Active<br>
-                [Work] sync_ios_data: CONTINUING ✅<br>
-                [Timer] 180s remaining...
-            </div>
-
-            <button class="btn" style="margin-top: 40px; width: 100%; background: #000;" onclick="location.reload()">Restart iOS Demo</button>
         </div>
     </div>
 
+    <div class="status-badge">
+        <div class="dot dot-red"></div>
+        Without lifecycle_guard
+    </div>
+
     <script>
+        const terminal = document.getElementById('terminal');
+        const btn = document.getElementById('btn-sync');
+        const syncStatus = document.getElementById('sync-status');
+
+        function addLog(text, type = '') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.innerHTML = text;
+            terminal.appendChild(line);
+            setTimeout(() => line.classList.add('show'), 50);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
         function startDemo() {
-            const btn = document.getElementById('btn');
-            const card = document.getElementById('card');
-            const status = document.getElementById('status');
-            const banner = document.getElementById('banner');
-            
             btn.disabled = true;
-            btn.innerText = 'Task Scheduled...';
-            card.classList.add('active');
-            status.innerText = 'Protection Window Open';
+            syncStatus.style.display = 'block';
+            
+            addLog('▶ User taps "Start Background Sync"');
             
             setTimeout(() => {
-                banner.classList.add('show');
+                addLog('<span class="prompt">[Flutter]</span> Starting mission-critical sync...');
+                addLog('<span class="prompt">[Native]</span> UIApplication.shared.beginBackgroundTask...');
             }, 800);
 
             setTimeout(() => {
-                document.getElementById('overlay').classList.add('show');
-            }, 4000);
+                addLog('<span class="prompt">[Native]</span> Background identifier: 129 granted');
+                addLog('<span class="prompt">[Flutter]</span> Uploading batch 1/5...');
+            }, 2000);
+
+            // Simulation: Termination
+            setTimeout(() => {
+                addLog('<span class="error-msg">✖ App pushed to background & suspended</span>');
+                document.body.style.opacity = '0.9';
+            }, 4500);
+
+            setTimeout(() => {
+                addLog('<span class="success">🛡️ Guard protecting execution window...</span>');
+                addLog('<span class="prompt">[Flutter]</span> Uploading batch 2/5... (Active)');
+                addLog('<span class="success">✓ iOS Background processing PROTECTED.</span>');
+            }, 6000);
         }
     </script>
 </body>

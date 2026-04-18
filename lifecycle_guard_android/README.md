@@ -21,6 +21,8 @@ See how the Android Foreground Service keeps your task alive:
 
 ![Lifecycle Guard Android Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
+### 🕹️ [**Try the Android Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/demoandroid.html)
+
 ---
 
 ## 🚀 Why this package?

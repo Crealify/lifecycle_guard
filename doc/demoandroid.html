@@ -4,306 +4,287 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="guard_icon.png">
-    <title>Android Lifecycle Guard | Interactive Demo</title>
+    <title>Android Demo | lifecycle_guard</title>
     <style>
         :root {
-            --primary: #3fb950;
-            --bg: #0b0e14;
+            --bg: #090c12;
             --card: #161b22;
             --border: #30363d;
             --text: #e6edf3;
             --text-muted: #8b949e;
+            --primary: #58a6ff;
+            --secondary: #3fb950;
+            --error: #f85149;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            padding: 60px 20px;
+            overflow-x: hidden;
         }
 
-        .phone {
-            width: 320px;
-            height: 640px;
+        /* Top Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-logo img { width: 32px; height: 32px; }
+        .header-logo h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+        .header-logo h1 span { color: var(--text-muted); font-weight: 400; }
+        .tagline { color: var(--text-muted); font-size: 14px; }
+
+        /* Layout Container */
+        .demo-container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            max-width: 1100px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Phone Styling */
+        .phone-frame {
+            width: 300px;
+            height: 600px;
             background: #000;
             border: 12px solid #1a1c1e;
-            border-radius: 48px;
+            border-radius: 40px;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
             overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .screen {
-            flex: 1;
-            background: var(--bg);
-            padding: 24px;
+        .phone-screen {
+            height: 100%;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-        }
-
-        .header {
-            display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 32px;
+            text-align: center;
         }
 
-        .logo-box {
-            width: 44px;
-            height: 44px;
-            background: #3fb950;
-            border-radius: 12px;
+        .app-icon-large {
+            width: 64px;
+            height: 64px;
+            background: #1a73e8;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 60px 0 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        h1 {
-            font-size: 18px;
-            font-weight: 700;
-        }
+        .app-name { font-weight: 700; font-size: 18px; margin-bottom: 40px; }
 
-        .android-tag {
-            font-size: 10px;
-            background: rgba(63, 185, 80, 0.2);
-            color: var(--primary);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .hero-text {
-            font-size: 24px;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-
-        .status-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .status-card.active {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(63, 185, 80, 0.1);
-        }
-
-        .status-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .status-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .active .status-value {
-            color: var(--primary);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: #000;
+        .btn-sync {
+            width: 100%;
+            background: #1f6feb;
+            color: white;
             border: none;
             padding: 16px;
-            border-radius: 24px;
-            font-weight: 800;
-            font-size: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
-            margin-top: auto;
+            transition: all 0.2s;
         }
 
-        .notification {
-            position: absolute;
-            top: -100px;
-            left: 8px;
-            right: 8px;
-            background: #1f1f1f;
-            border-radius: 24px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
+        .btn-sync:active { transform: scale(0.96); }
+        .btn-sync:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .syncing-text {
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: none;
         }
 
-        .notification.show {
-            top: 16px;
-        }
-
-        .notif-icon {
-            width: 32px;
-            height: 32px;
-            background: #3fb950;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .notif-content h4 {
-            font-size: 13px;
-            color: #fff;
-        }
-
-        .notif-content p {
-            font-size: 11px;
-            color: #aaa;
-        }
-
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
+        /* Terminal Styling */
+        .terminal-window {
+            flex: 1;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            height: 500px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 600px;
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
             align-items: center;
-            padding: 32px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 200;
+            border-radius: 12px 12px 0 0;
         }
 
-        .overlay.show {
-            opacity: 1;
-            pointer-events: all;
+        .traffic-lights { display: flex; gap: 8px; margin-right: 20px; }
+        .light { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+        .terminal-title { color: var(--text-muted); font-size: 12px; flex: 1; text-align: center; margin-right: 40px; }
+
+        .terminal-body {
+            padding: 24px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-y: auto;
         }
 
-        .terminal {
-            background: #000;
-            border: 1px solid #333;
-            padding: 16px;
-            border-radius: 12px;
-            width: 100%;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            color: #3fb950;
-            margin-top: 32px;
-            text-align: left;
+        .log-line { margin-bottom: 8px; opacity: 0; transform: translateX(-10px); transition: all 0.3s; }
+        .log-line.show { opacity: 1; transform: translateX(0); }
+        .prompt { color: var(--primary); margin-right: 8px; }
+        .success { color: var(--secondary); }
+        .warning { color: var(--yellow); }
+        .error-msg { color: var(--error); }
+
+        /* Bottom Badge */
+        .status-badge {
+            margin-top: 60px;
+            background: #161b22;
+            border: 1px solid var(--border);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
         }
 
-        .pulse {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin-right: 8px;
-            display: none;
-            animation: pulse-ring 1.25s infinite;
-        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-red { background: var(--error); box-shadow: 0 0 10px var(--error); }
 
-        .active .pulse {
-            display: inline-block;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(.5); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+        @media (max-width: 850px) {
+            .demo-container { flex-direction: column; align-items: center; }
+            .terminal-window { width: 100%; height: 350px; }
+            body { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="phone">
-        <div id="notif" class="notification">
-            <div class="notif-icon">
-                <img src="guard_icon.png" width="18" alt="Guard">
-            </div>
-            <div class="notif-content">
-                <h4>Lifecycle Guard | Android Service</h4>
-                <p>Task: foreground_sync_active</p>
+
+    <div class="page-header">
+        <div class="header-logo">
+            <img src="guard_icon.png" alt="Guard">
+            <h1>lifecycle_guard <span>by Crealify</span></h1>
+        </div>
+        <p class="tagline">Background tasks survive. Always.</p>
+    </div>
+
+    <div class="demo-container">
+        <!-- Phone UI -->
+        <div class="phone-frame">
+            <div class="phone-screen">
+                <div style="font-size: 10px; color: #555; width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <span>9:41</span>
+                    <span>Pixel 7 Pro</span>
+                </div>
+                
+                <div class="app-icon-large">
+                    <img src="guard_icon.png" width="32" alt="App">
+                </div>
+                <div class="app-name">MyApp</div>
+
+                <button id="btn-sync" class="btn-sync" onclick="startDemo()">Start Background Sync</button>
+                <div id="sync-status" class="syncing-text">Syncing...</div>
             </div>
         </div>
 
-        <div class="screen">
-            <div class="header">
-                <div class="logo-box">
-                    <img src="guard_icon.png" width="24" alt="Guard">
+        <!-- Terminal UI -->
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="traffic-lights">
+                    <div class="light red"></div>
+                    <div class="light yellow"></div>
+                    <div class="light green"></div>
                 </div>
-                <div>
-                    <h1>Android Guard</h1>
-                    <span class="android-tag">v15 Compliant</span>
-                </div>
+                <div class="terminal-title">flutter — Android (Pixel 7 Pro)</div>
             </div>
-
-            <div class="hero-text">
-                Foreground protection for Android 15.
+            <div id="terminal" class="terminal-body">
+                <div class="log-line show"><span class="prompt">$</span> flutter run</div>
+                <div class="log-line show success">✓ App installed on Pixel 7 Pro</div>
+                <div class="log-line show">▶ User ready to test...</div>
             </div>
-
-            <div id="card" class="status-card">
-                <p class="status-label">Service Type: dataSync</p>
-                <div style="display: flex; align-items: center;">
-                    <span class="pulse"></span>
-                    <p id="status" class="status-value">Ready to guard</p>
-                </div>
-            </div>
-
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                This demo simulates how Lifecycle Guard uses a <b>Foreground Service</b> to protect your work when the system attempts to kill the process.
-            </p>
-
-            <button id="btn" class="btn" onclick="startDemo()">Activate Android Guard</button>
-        </div>
-
-        <div id="overlay" class="overlay">
-            <h2 style="color: #fff; margin-bottom: 8px;">Process Killed!</h2>
-            <p style="color: #888; font-size: 14px;">User swiped app from Recents.</p>
-            
-            <div class="terminal">
-                > System: Activity killed.<br>
-                > Guard: Service promoted to Foreground.<br>
-                > Type: dataSync (Android 15+)<br>
-                > Sync status: CONTINUING... ⏳<br>
-                > Integrity: VERIFIED ✅
-            </div>
-
-            <button class="btn" style="margin-top: 40px; width: 100%; background: #222; color: #fff;" onclick="location.reload()">Reset Android Demo</button>
         </div>
     </div>
 
+    <div class="status-badge">
+        <div class="dot dot-red"></div>
+        Without lifecycle_guard
+    </div>
+
     <script>
+        const terminal = document.getElementById('terminal');
+        const btn = document.getElementById('btn-sync');
+        const syncStatus = document.getElementById('sync-status');
+
+        function addLog(text, type = '') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.innerHTML = text;
+            terminal.appendChild(line);
+            setTimeout(() => line.classList.add('show'), 50);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
         function startDemo() {
-            const btn = document.getElementById('btn');
-            const card = document.getElementById('card');
-            const status = document.getElementById('status');
-            const notif = document.getElementById('notif');
-            
             btn.disabled = true;
-            btn.innerText = 'Service Guarding...';
-            card.classList.add('active');
-            status.innerText = 'Foreground Sync Active';
+            syncStatus.style.display = 'block';
+            
+            addLog('▶ User taps "Start Background Sync"');
             
             setTimeout(() => {
-                notif.classList.add('show');
+                addLog('<span class="prompt">I/flutter:</span> Starting mission-critical sync...');
+                addLog('<span class="prompt">I/Native:</span> Initializing Lifecycle Guard Service...');
             }, 800);
 
             setTimeout(() => {
-                document.getElementById('overlay').classList.add('show');
-            }, 4000);
+                addLog('<span class="prompt">I/Native:</span> Foreground Service promoted (dataSync)');
+                addLog('<span class="prompt">I/flutter:</span> Progress: 12% ... 25% ...');
+            }, 2000);
+
+            // Simulation: Termination
+            setTimeout(() => {
+                addLog('<span class="error-msg">✖ Process terminated by system (User Swipe)</span>');
+                document.body.style.opacity = '0.9';
+            }, 4500);
+
+            setTimeout(() => {
+                addLog('<span class="success">🛡️ Guard detected termination. Keeping process alive.</span>');
+                addLog('<span class="prompt">I/flutter:</span> Progress: 26% ... 27% ... (Resumed)');
+                addLog('<span class="success">✓ Background sync PROTECTED.</span>');
+            }, 6000);
         }
     </script>
 </body>

@@ -21,6 +21,8 @@ See the iOS Background Task flow in action:
 
 ![Lifecycle Guard iOS Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
+### 🕹️ [**Try the iOS Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/iosdemo.html)
+
 ---
 
 ## 🚀 The iOS Challenge
