@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:lifecycle_guard/lifecycle_guard.dart';
 
+/// ---------------------------------------------------------------------------
+/// Lifecycle Guard - Full Demo Example
+/// 
+/// This example demonstrates how to use the [LifecycleGuard] plugin to 
+/// ensure that critical background tasks (like data syncing) survive 
+/// even when the user swipes the app away from the multitasking view.
+/// ---------------------------------------------------------------------------
+
 void main() {
+  // Always ensure widgets are initialized before calling native plugins
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const LifecycleGuardDemoApp());
 }
 
@@ -45,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
+    // Animation for the "Guarded" state UI
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -60,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
+  /// 🚀 THE CORE LOGIC: Starting a Secure Task
   Future<void> _startTask() async {
     setState(() {
       _isRunning = true;
@@ -69,19 +81,28 @@ class _HomeScreenState extends State<HomeScreen>
     _pulseController.repeat(reverse: true);
 
     try {
+      // 🛡️ [LifecycleGuard.runSecureTask] is the main entry point.
+      // Once this is called, a native service starts (Foreground on Android, 
+      // BGTask on iOS) which wraps your logic.
       await LifecycleGuard.runSecureTask(
         id: "demo_sync_${DateTime.now().millisecondsSinceEpoch}",
         payload: {
           "source": "example_app",
           "timestamp": DateTime.now().toIso8601String(),
-          "retry": true,
+          "retry": true, // Example custom flag
         },
       );
+      
       if (!mounted) return;
+      
       setState(() {
         _statusText = '✅ Task dispatched successfully!';
         _statusColor = const Color(0xFF3FB950);
       });
+      
+      // NOTE: In a real app, you would now perform your heavy work here
+      // (e.g., Dio/Http upload, local DB processing, etc.)
+      
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -104,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // Header Section
               Row(
                 children: [
                   Container(
@@ -118,7 +139,10 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Image.network('https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png', width: 28),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   const Column(
@@ -146,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
 
               const SizedBox(height: 28),
 
-              // Tagline
+              // Educational Tagline
               const Text(
                 'Background tasks\nsurvive. Always.',
                 style: TextStyle(
@@ -158,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               const SizedBox(height: 8),
               const Text(
-                'Even if the user swipes your app away.',
+                'Once you start the guard, your task will continue even if you swipe the app away from the multitasking view.',
                 style: TextStyle(
                   fontSize: 14,
                   color: Color(0xFF8B949E),
@@ -167,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen>
 
               const SizedBox(height: 32),
 
-              // Demo video card
+              // Visual Demo Card
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -180,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      '🎬 Demo',
+                      '🎬 Instructions',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
@@ -188,33 +212,9 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                     const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        height: 200,
-                        color: const Color(0xFF090C12),
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('▶', style: TextStyle(fontSize: 40, color: Color(0xFF58A6FF))),
-                              SizedBox(height: 8),
-                              Text(
-                                'Watch: App Killed → Guard Activates',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF8B949E),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
                     const Text(
-                      '📺 Watch the full demo at github.com/Crealify/lifecycle_guard',
-                      style: TextStyle(fontSize: 11, color: Color(0xFF8B949E)),
+                      '1. Click the blue button below\n2. Swipe your app away immediately\n3. Check your console/logs: the task is still running!',
+                      style: TextStyle(fontSize: 13, color: Color(0xFF8B949E), height: 1.5),
                     ),
                   ],
                 ),
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen>
 
               const SizedBox(height: 24),
 
-              // Feature badges
+              // Feature Badges
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -230,13 +230,12 @@ class _HomeScreenState extends State<HomeScreen>
                   _badge('Android 15+', '🤖', const Color(0xFF3FB950)),
                   _badge('iOS Ready', '🍎', const Color(0xFF58A6FF)),
                   _badge('Zero Data Loss', '💾', const Color(0xFFD29922)),
-                  _badge('30s Setup', '⚡', const Color(0xFF79C0FF)),
                 ],
               ),
 
               const SizedBox(height: 28),
 
-              // Status card
+              // Task Status Visualizer
               AnimatedBuilder(
                 animation: _pulseAnimation,
                 builder: (context, child) {
@@ -259,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Task Status',
+                            'Current Engine Status',
                             style: TextStyle(
                               fontSize: 11,
                               color: Color(0xFF8B949E),
@@ -283,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen>
 
               const SizedBox(height: 16),
 
-              // Action button
+              // Start Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -299,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   child: Text(
                     _isRunning
-                        ? 'Guard Running...'
+                        ? '🛡️ Guard Active...'
                         : '▶  Start Secure Task',
                     style: const TextStyle(
                       fontSize: 15,
@@ -309,9 +308,14 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
 
-              // Code snippet
+              // Code Snippet for quick copy
+              const Text(
+                'Copy-Paste Snippet',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white70),
+              ),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
@@ -320,28 +324,22 @@ class _HomeScreenState extends State<HomeScreen>
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: const Color(0xFF30363D)),
                 ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Usage', style: TextStyle(fontSize: 11, color: Color(0xFF8B949E))),
-                    SizedBox(height: 8),
-                    SelectableText(
-                      'await LifecycleGuard.runSecureTask(\n'
-                      '  id: "sync_001",\n'
-                      '  payload: {"retry": true},\n'
-                      ');',
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                        color: Color(0xFF79C0FF),
-                        height: 1.6,
-                      ),
-                    ),
-                  ],
+                child: const SelectableText(
+                  '// Trigger the guard\n'
+                  'await LifecycleGuard.runSecureTask(\n'
+                  '  id: "my_task_id",\n'
+                  '  payload: {"key": "value"},\n'
+                  ');',
+                  style: TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                    color: Color(0xFF79C0FF),
+                    height: 1.6,
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 40),
 
               // Footer
               const Center(

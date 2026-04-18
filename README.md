@@ -13,7 +13,7 @@ Stop losing data when Android or iOS aggressively kills your app.
 [![pub version](https://img.shields.io/badge/pub-v1.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-support)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#⚙️-platform-specific-setup-required)
 
 </div>
 

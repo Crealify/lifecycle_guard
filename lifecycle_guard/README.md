@@ -13,38 +13,43 @@ Stop losing data when Android or iOS aggressively kills your app.
 [![pub version](https://img.shields.io/badge/pub-v1.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-support)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/CONTRIBUTING.md)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#⚙️-platform-specific-setup-required)
 
 </div>
 
 ---
 
-## 🎬 Demo
+## 🔴 The Problem
+Ever noticed your background tasks suddenly stop when a user swipes your app away?
+Modern mobile operating systems (Android 15+ and iOS 13+) are increasingly aggressive at killing processes to save battery.
+*   **User Swipes App**: Your Dart Isolate is instantly killed.
+*   **System Pressure**: The OS reclaims memory, terminating your "background" thread.
+*   **Battery Optimization**: Tasks are deferred or canceled without warning.
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif" width="100%" alt="lifecycle_guard Demo">
-  <p><i>Watch lifecycle_guard in action: App swipe → Background survival → Task completion.</i></p>
-</div>
+If your app is syncing a database, uploading a large file, or processing a payment, **you just lost data.**
 
----
-
-## ✨ Features
-
-| Feature | Description |
-|---|---|
-| 🛡️ **Isolate Protection** | Boots a lightweight secondary engine so your task never shares the UI thread fate |
-| 🤖 **Android 15+ Ready** | Fully compliant with new `foregroundServiceType: dataSync` requirements |
-| 🍎 **iOS Compatible** | Bridges to Apple's native background task scheduler |
-| 📡 **Zero Data Loss** | Tasks continue even when users swipe the app away |
-| ⚡ **30-Second Setup** | One-line API — no complex native configuration needed |
-| 🔐 **User-Safe** | No auto-execution, no hidden scripts, everything is user-triggered |
+## 🛡️ The Solution: lifecycle_guard
+`lifecycle_guard` creates a **Native Protection Layer** around your critical tasks. 
+By bridging to native Foreground Services (Android) and Background Processing Tasks (iOS), it ensures your logic completes even if the UI process is wiped from memory.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Key Benefits
+- **✅ Survival-First**: Survives app swipes, low-memory kills, and doze modes.
+- **✅ Android 15 Ready**: Built-in support for `foregroundServiceType: dataSync`.
+- **✅ iOS BGTask Integration**: Properly utilizes Apple's `BGTaskScheduler`.
+- **✅ Zero Config Isolation**: Automatically boots a secondary engine for your task.
+- **✅ Developer Friendly**: 100% type-safe API with simple `payload` support.
 
-### Installation
+## 🚀 When to Use
+- **Data Syncing**: Sending offline records to your server.
+- **File Processing**: Compressing or encrypting local files.
+- **Media Uploads**: Ensuring a user's video actually finishes uploading.
+- **State Updates**: Finalizing critical database transactions.
+
+---
+
+## 📦 Installation
 
 Add to your `pubspec.yaml`:
 
@@ -53,32 +58,105 @@ dependencies:
   lifecycle_guard: ^1.0.1
 ```
 
-### ⚙️ Platform-Specific Setup
+---
 
-For production use, you **must** configure the native layer for each platform. Click below for detailed guides:
+## ⚙️ Platform-Specific Setup (REQUIRED)
 
-| Platform | Setup Guide | Key Requirements |
-|---|---|---|
-| **Android** | [Android Guide](https://pub.dev/packages/lifecycle_guard_android) | Manifest Service, Notification Permissions |
-| **iOS** | [iOS Guide](https://pub.dev/packages/lifecycle_guard_ios) | Background Modes, Task Identifiers |
-| **Common** | [Interface Docs](https://pub.dev/packages/lifecycle_guard_platform_interface) | Internal Contract Details |
+For the "Guard" to hold, you **must** configure the native layer.
+
+### 🤖 Android Setup
+Add the following to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<!-- 1. Permissions -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+<application ...>
+    <!-- 2. Service Declaration -->
+    <service
+        android:name="com.crealify.lifecycle_guard_android.LifecycleService"
+        android:foregroundServiceType="dataSync"
+        android:exported="false">
+    </service>
+</application>
+```
+
+### 🍎 iOS Setup
+1.  **Capabilities**: Open Xcode -> Signing & Capabilities -> **Background Modes**. Check:
+    - `Background fetch`
+    - `Background processing`
+2.  **Info.plist**: Add the background task identifier:
+```xml
+<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>com.crealify.lifecycle_guard.background_task</string>
+</array>
+```
 
 ---
 
-## 💡 Usage
+## 💡 Full Example Code
+Here is a complete `main.dart` that you can copy-paste to see `lifecycle_guard` in action.
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:lifecycle_guard/lifecycle_guard.dart';
 
-// Trigger a mission-critical background task
-await LifecycleGuard.runSecureTask(
-  id: "sync_user_data",
-  payload: {
-    "userId": "12345",
-    "retry": true,
-    "timestamp": DateTime.now().toIso8601String(),
-  },
-);
+void main() {
+  runApp(const MaterialApp(home: GuardExample()));
+}
+
+class GuardExample extends StatelessWidget {
+  const GuardExample({super.key});
+
+  // This is the task that will survive app termination
+  Future<void> _triggerSecureTask() async {
+    try {
+      // 🛡️ The 'Guard' boots here. 
+      // Even if you swipe the app away after this call, the task completes.
+      await LifecycleGuard.runSecureTask(
+        id: "sync_records_001",
+        payload: {
+          "user_id": "usr_99",
+          "action": "sync_offline_db",
+          "timestamp": DateTime.now().toIso8601String(),
+        },
+      );
+      print("Task successfully handed off to the Guard!");
+    } catch (e) {
+      print("Failed to start guard: $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('🛡️ lifecycle_guard Demo')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.security, size: 80, color: Colors.blue),
+            const SizedBox(height: 20),
+            const Text(
+              'Click below, then swipe your app away!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: _triggerSecureTask,
+              style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
+              child: const Text('Start Secure Background Task'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ---
@@ -138,4 +216,3 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 Built with ❤️ by [Crealify](https://anil-bhattarai.com.np) · Open to collaborate · PRs welcome
 
 </div>
-

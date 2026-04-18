@@ -7,10 +7,11 @@ homepage: https://anil-bhattarai.com.np
 topics:
   - background-task
   - background-execution
-  - foreground-service
   - data-sync
-  - ios
-  - android
+  - flutter
+  - offline-first
+  - isolate
+  - dart
 
 environment:
   sdk: ^3.11.4
