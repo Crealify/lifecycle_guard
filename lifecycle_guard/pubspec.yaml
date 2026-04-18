@@ -10,9 +10,6 @@ topics:
   - foreground-service
   - data-sync
   - flutter
-  - offline-first
-  - isolate
-  - dart
 
 screenshots:
   - description: 'Lifecycle Guard Active Status'
