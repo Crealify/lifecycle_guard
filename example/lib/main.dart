@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> _startTask() async {
     setState(() {
       _isRunning = true;
-      _statusText = '🛡️ Lifecycle Guard Active...';
+      _statusText = 'Lifecycle Guard: Active log protection...';
       _statusColor = const Color(0xFF58A6FF);
     });
     _pulseController.repeat(reverse: true);
@@ -118,9 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Center(
-                      child: Text('🛡️', style: TextStyle(fontSize: 22)),
-                    ),
+                      child: Image.network('https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png', width: 28),
                   ),
                   const SizedBox(width: 12),
                   const Column(
@@ -301,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   child: Text(
                     _isRunning
-                        ? '🛡️ Guard Running...'
+                        ? 'Guard Running...'
                         : '▶  Start Secure Task',
                     style: const TextStyle(
                       fontSize: 15,

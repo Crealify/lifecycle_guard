@@ -1,8 +1,16 @@
 name: lifecycle_guard
-description: "A bulletproof Flutter plugin for mission-critical background execution."
+description: "Flutter apps often lose critical work when users swipe them away or the OS kills the process. lifecycle_guard ensures your background tasks continue and complete — even after termination."
 version: 1.0.1
 repository: https://github.com/Crealify/lifecycle_guard.git
 homepage: https://anil-bhattarai.com.np
+
+topics:
+  - background-task
+  - background-execution
+  - foreground-service
+  - data-sync
+  - ios
+  - android
 
 environment:
   sdk: ^3.11.4

@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🧩 lifecycle_guard_platform_interface
+<img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="120" alt="lifecycle_guard Logo">
+
+# lifecycle_guard_platform_interface
 
 **The common interface contract for mission-critical background execution.**
 

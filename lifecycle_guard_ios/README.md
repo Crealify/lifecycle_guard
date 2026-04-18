@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🍎 lifecycle_guard_ios
+<img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
+
+# lifecycle_guard_ios
 
 **The robust iOS implementation for mission-critical background execution.**
 

@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🛡️ lifecycle_guard
+<img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="160" alt="lifecycle_guard Logo">
+
+# lifecycle_guard
 
 **The bulletproof Flutter plugin for mission-critical background execution.**
 
@@ -48,7 +50,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lifecycle_guard: ^1.0.0
+  lifecycle_guard: ^1.0.1
 ```
 
 ### ⚙️ Platform-Specific Setup
@@ -85,36 +87,42 @@ await LifecycleGuard.runSecureTask(
 
 ```mermaid
 graph TD
-    subgraph Flutter_Layer ["Flutter App (UI Thread)"]
-        A[LifecycleGuard.runSecureTask]
+    subgraph App ["📱 Flutter Application"]
+        A["<b>runSecureTask()</b><br/><i>Initiate critical task</i>"]
     end
 
-    subgraph Native_Bridge ["MethodChannel Bridge"]
-        B{Platform Check}
+    subgraph Bridge ["🌉 Platform Bridge"]
+        B{"OS Detection"}
     end
 
-    subgraph Native_Layer ["Native Protection Layer"]
-        C[Android: LifecycleService<br/><i>Foreground + dataSync</i>]
-        D[iOS: BGTaskScheduler<br/><i>BGProcessingTask</i>]
+    subgraph Guard ["🛡️ Lifecycle Guard Layer"]
+        subgraph Android ["🤖 Android"]
+            C["<b>LifecycleService</b><br/><i>Foreground + dataSync</i>"]
+        end
+        subgraph iOS ["🍎 iOS"]
+            D["<b>BGTaskScheduler</b><br/><i>BGProcessingTask</i>"]
+        end
+    end
+
+    subgraph Survival ["🚀 Survival Matrix"]
+        E["✅ App Swipe Survival"]
+        F["✅ Doze Mode Protection"]
+        G["✅ Battery Save Compliance"]
     end
 
     A --> B
-    B -- Android --> C
-    B -- iOS --> D
+    B -- "Android 15+" --> C
+    B -- "iOS 13+" --> D
+    
+    C --> Survival
+    D --> Survival
 
-    subgraph Results ["Survival Benefits"]
-        E[✅ App Swipe Survival]
-        F[✅ Doze Mode Protection]
-        G[✅ Battery Saver Compliance]
-    end
-
-    C --> Results
-    D --> Results
-
-    style Flutter_Layer fill:#02569B,color:#fff,stroke:#fff
-    style Native_Layer fill:#2E7D32,color:#fff,stroke:#fff
-    style Native_Bridge fill:#333,color:#fff
-    style Results fill:#1b1f23,color:#3fb950,stroke:#3fb950
+    %% Styling
+    style App fill:#0D47A1,color:#fff,stroke:#fff,stroke-width:2px
+    style Bridge fill:#37474F,color:#fff,stroke:#fff,stroke-width:2px
+    style Android fill:#1B5E20,color:#fff,stroke:#fff,stroke-width:2px
+    style iOS fill:#000,color:#fff,stroke:#fff,stroke-width:2px
+    style Survival fill:#1B1F23,color:#3fb950,stroke:#3fb950,stroke-width:2px
 ```
 
 ---

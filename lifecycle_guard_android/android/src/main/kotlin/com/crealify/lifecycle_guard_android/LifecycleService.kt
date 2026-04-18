@@ -23,7 +23,7 @@ class LifecycleService : Service() {
         
         // Premium UX: Using a clean, meaningful notification
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("🛡️ Lifecycle Guard Active")
+            .setContentTitle("Lifecycle Guard | Guarding Logs")
             .setContentText("Securing task: $taskId")
             .setSmallIcon(android.R.drawable.stat_notify_sync) // Replace with your app icon later
             .setOngoing(true)
