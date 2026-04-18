@@ -162,6 +162,83 @@ class GuardExample extends StatelessWidget {
 
 ---
 
+## 🏗️ Platform-Specific Full Examples
+If you want to target a specific platform directly, you can use these full-code snippets.
+
+### 🤖 Android Implementation (Full `main.dart`)
+This uses the Android-specific package to trigger a Foreground Service.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:lifecycle_guard_android/lifecycle_guard_android.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MaterialApp(home: AndroidGuardExample()));
+}
+
+class AndroidGuardExample extends StatelessWidget {
+  const AndroidGuardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Android Guard Demo')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            // 🛡️ Triggers Android-specific Foreground Service (dataSync)
+            await LifecycleGuardAndroid().runSecureTask(
+              id: "android_backup_sync",
+              payload: {"priority": "max"},
+            );
+          },
+          child: const Text('Start Android Protected Sync'),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### 🍎 iOS Implementation (Full `main.dart`)
+This uses the iOS-specific package to schedule a BGTask.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:lifecycle_guard_ios/lifecycle_guard_ios.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MaterialApp(home: IosGuardExample()));
+}
+
+class IosGuardExample extends StatelessWidget {
+  const IosGuardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('iOS Guard Demo')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            // 🛡️ Registers an iOS-specific BGProcessingTask
+            await LifecycleGuardIos().runSecureTask(
+              id: "ios_background_upload",
+              payload: {"retries": 3},
+            );
+          },
+          child: const Text('Schedule iOS BGTask'),
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
 ## 🧠 How It Works
 
 ```mermaid
