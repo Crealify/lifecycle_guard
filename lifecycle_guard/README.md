@@ -246,50 +246,6 @@ class IosGuardExample extends StatelessWidget {
 
 ---
 
-## How It Works
-
-```mermaid
-graph TD
-    subgraph App ["Flutter Application"]
-        A["<b>runSecureTask()</b><br/><i>Initiate critical task</i>"]
-    end
-
-    subgraph Bridge ["Platform Bridge"]
-        B{"OS Detection"}
-    end
-
-    subgraph Guard ["Lifecycle Guard Layer"]
-        subgraph Android ["Android"]
-            C["<b>LifecycleService</b><br/><i>Foreground + dataSync</i>"]
-        end
-        subgraph iOS ["iOS"]
-            D["<b>BGTaskScheduler</b><br/><i>BGProcessingTask</i>"]
-        end
-    end
-
-    subgraph Survival ["Survival Matrix"]
-        E["App Swipe Survival"]
-        F["Doze Mode Protection"]
-        G["Battery Save Compliance"]
-    end
-
-    A --> B
-    B -- "Android 15+" --> C
-    B -- "iOS 13+" --> D
-    
-    C --> Survival
-    D --> Survival
-
-    %% Styling
-    style App fill:#0D47A1,color:#fff,stroke:#fff,stroke-width:2px
-    style Bridge fill:#37474F,color:#fff,stroke:#fff,stroke-width:2px
-    style Android fill:#1B5E20,color:#fff,stroke:#fff,stroke-width:2px
-    style iOS fill:#000,color:#fff,stroke:#fff,stroke-width:2px
-    style Survival fill:#1B1F23,color:#3fb950,stroke:#3fb950,stroke-width:2px
-```
-
----
-
 ## License
 
 BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
