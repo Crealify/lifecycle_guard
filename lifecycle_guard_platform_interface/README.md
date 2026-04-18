@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# ⚙️ lifecycle_guard_platform_interface
+# lifecycle_guard_platform_interface
 
 **The common interface contract for mission-critical background execution.**
 
@@ -16,28 +16,28 @@ This package defines the standardized API that ensures `lifecycle_guard` works i
 
 ---
 
-## 🎬 Demo
+## Demo
 See the `lifecycle_guard` ecosystem in action:
 
 ![Lifecycle Guard Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
 ---
 
-## 🚀 The Backbone of the Guard
+## The Backbone of the Guard
 This is a **Platform Interface** package as defined by the [Federated Plugins](https://flutter.dev/to/federated-plugins) architecture. It serves as the single source of truth for the plugin's API, ensuring that whether you are on Android or iOS, the behavior remains consistent.
 
-### 💎 Why this package exists:
-*   **🏗️ Uniformity**: Every platform-specific guard (Android, iOS) is forced to implement the exact same methods.
-*   **🛡️ Safety**: Prevents runtime errors by providing a static fallback implementation.
-*   **🌍 Community Driven**: Allows anyone to build a `lifecycle_guard_windows` or `lifecycle_guard_web` by simply extending this class.
+### Why this package exists:
+*   **Uniformity**: Every platform-specific guard (Android, iOS) is forced to implement the exact same methods.
+*   **Safety**: Prevents runtime errors by providing a static fallback implementation.
+*   **Community Driven**: Allows anyone to build a `lifecycle_guard_windows` or `lifecycle_guard_web` by simply extending this class.
 
 ---
 
-## 🛠️ Usage for Platform Implementers
+## Usage for Platform Implementers
 
 If you are building a new platform implementation for `lifecycle_guard`, you must extend the `LifecycleGuardPlatform` class.
 
-### 📝 Example Implementation Structure:
+### Example Implementation Structure:
 
 ```dart
 import 'package:lifecycle_guard_platform_interface/lifecycle_guard_platform_interface.dart';
@@ -53,7 +53,7 @@ class MyNewPlatformGuard extends LifecycleGuardPlatform {
     required String id,
     Map<String, dynamic>? payload,
   }) async {
-    // 🛡️ Your platform-specific native logic goes here
+    // Your platform-specific native logic goes here
     // e.g., Start a Windows Service or a Web Worker
     print("Starting secure task $id on the new platform...");
   }
@@ -62,20 +62,20 @@ class MyNewPlatformGuard extends LifecycleGuardPlatform {
 
 ---
 
-## 📐 Architecture Overview
+## Architecture Overview
 The platform interface acts as the middleman in the federated structure:
 
-1.  **`lifecycle_guard`**: The app-facing package that developers use.
-2.  **`lifecycle_guard_platform_interface`**: **(This package)** The glue/contract.
-3.  **`lifecycle_guard_android / ios`**: The actual native workers.
+1.  **lifecycle_guard**: The app-facing package that developers use.
+2.  **lifecycle_guard_platform_interface**: **(This package)** The glue/contract.
+3.  **lifecycle_guard_android / ios**: The actual native workers.
 
 ---
 
-## 📄 License
+## License
 BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
 
 ---
 
 <div align="center">
-Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
+Built by [Crealify](https://anil-bhattarai.com.np)
 </div>

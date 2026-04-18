@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  /// 🚀 THE CORE LOGIC: Starting a Secure Task
+  /// THE CORE LOGIC: Starting a Secure Task
   Future<void> _startTask() async {
     setState(() {
       _isRunning = true;
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen>
     _pulseController.repeat(reverse: true);
 
     try {
-      // 🛡️ [LifecycleGuard.runSecureTask] is the main entry point.
+      // [LifecycleGuard.runSecureTask] is the main entry point.
       // Once this is called, a native service starts (Foreground on Android, 
       // BGTask on iOS) which wraps your logic.
       await LifecycleGuard.runSecureTask(
@@ -96,14 +96,14 @@ class _HomeScreenState extends State<HomeScreen>
       if (!mounted) return;
       
       setState(() {
-        _statusText = '🛡️ Guarding active! You can swipe app now.';
+        _statusText = 'Guard active. You can swipe app now.';
         _statusColor = const Color(0xFF3FB950);
       });
       
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _statusText = '❌ Error: ${e.toString()}';
+        _statusText = 'Error: ${e.toString()}';
         _statusColor = const Color(0xFFF85149);
         _isRunning = false;
       });
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  /// 🛑 STOP THE GUARD: Releasing Resources
+  /// STOP THE GUARD: Releasing Resources
   Future<void> _stopTask() async {
     try {
       await LifecycleGuard.stopSecureTask();
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen>
       
       setState(() {
         _isRunning = false;
-        _statusText = '✅ Guard stopped. Resources released.';
+        _statusText = 'Guard stopped. Resources released.';
         _statusColor = const Color(0xFF8B949E);
       });
       _pulseController.stop();
@@ -215,19 +215,19 @@ class _HomeScreenState extends State<HomeScreen>
                   border: Border.all(color: const Color(0xFF30363D)),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '🎬 Instructions',
+                    Text(
+                      'Instructions',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF58A6FF),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: 8),
+                    Text(
                       '1. Click Start Secure Task\n2. Swipe your app away immediately\n3. The background sync continues uninterrupted!',
                       style: TextStyle(fontSize: 13, color: Color(0xFF8B949E), height: 1.5),
                     ),
@@ -242,9 +242,9 @@ class _HomeScreenState extends State<HomeScreen>
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _badge('Android 15+', '🤖', const Color(0xFF3FB950)),
-                  _badge('iOS Ready', '🍎', const Color(0xFF58A6FF)),
-                  _badge('Zero Data Loss', '💾', const Color(0xFFD29922)),
+                  _badge('Android 15+', Icons.android, const Color(0xFF3FB950)),
+                  _badge('iOS Ready', Icons.apple, const Color(0xFF58A6FF)),
+                  _badge('Zero Data Loss', Icons.save, const Color(0xFFD29922)),
                 ],
               ),
 
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
                       child: Text(
-                        _isRunning ? '🛡️ Guard Active' : '▶  Start Task',
+                        _isRunning ? 'Guard Active' : 'Start Task',
                         style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -331,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen>
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text('🛑 Stop Guard'),
+                        child: const Text('Stop Guard'),
                       ),
                     ),
                   ],
@@ -373,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen>
               // Footer
               const Center(
                 child: Text(
-                  '⭐ Star on GitHub · Open to collaborate\ngithub.com/Crealify/lifecycle_guard',
+                  'Star on GitHub · Open to collaborate\ngithub.com/Crealify/lifecycle_guard',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
@@ -390,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _badge(String label, String icon, Color color) {
+  Widget _badge(String label, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -401,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 12)),
+          Icon(icon, size: 12, color: color),
           const SizedBox(width: 4),
           Text(
             label,

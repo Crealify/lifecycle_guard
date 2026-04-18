@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="160" alt="lifecycle_guard Logo">
 
-# 🛡️ lifecycle_guard
+# lifecycle_guard
 
 **The bulletproof Flutter plugin for mission-critical background execution.**
 
@@ -13,20 +13,20 @@ Stop losing data when Android or iOS aggressively kills your app.
 [![pub version](https://img.shields.io/badge/pub-v1.0.1-blue?logo=dart)](https://pub.dev/packages/lifecycle_guard)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#⚙️-platform-specific-setup-required)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#platform-specific-setup-required)
 
 </div>
 
 ---
 
-## 🎬 Demo
+## Demo
 Watch how `lifecycle_guard` protects your tasks even after app termination:
 
 ![Lifecycle Guard Full Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
 ---
 
-## 🔴 The Problem
+## The Problem
 Ever noticed your background tasks suddenly stop when a user swipes your app away?
 Modern mobile operating systems (Android 15+ and iOS 13+) are increasingly aggressive at killing processes to save battery.
 *   **User Swipes App**: Your Dart Isolate is instantly killed.
@@ -35,28 +35,28 @@ Modern mobile operating systems (Android 15+ and iOS 13+) are increasingly aggre
 
 If your app is syncing a database, uploading a large file, or processing a payment, **you just lost data.**
 
-## 🛡️ The Solution: lifecycle_guard
+## The Solution: lifecycle_guard
 `lifecycle_guard` creates a **Native Protection Layer** around your critical tasks. 
 By bridging to native Foreground Services (Android) and Background Processing Tasks (iOS), it ensures your logic completes even if the UI process is wiped from memory.
 
 ---
 
-## ✨ Key Benefits
-- **✅ Survival-First**: Survives app swipes, low-memory kills, and doze modes.
-- **✅ Android 15 Ready**: Built-in support for `foregroundServiceType: dataSync`.
-- **✅ iOS BGTask Integration**: Properly utilizes Apple's `BGTaskScheduler`.
-- **✅ Zero Config Isolation**: Automatically boots a secondary engine for your task.
-- **✅ Developer Friendly**: 100% type-safe API with simple `payload` support.
+## Key Benefits
+- **Survival-First**: Survives app swipes, low-memory kills, and doze modes.
+- **Android 15 Ready**: Built-in support for `foregroundServiceType: dataSync`.
+- **iOS BGTask Integration**: Properly utilizes Apple's `BGTaskScheduler`.
+- **Zero Config Isolation**: Automatically boots a secondary engine for your task.
+- **Developer Friendly**: 100% type-safe API with simple `payload` support.
 
-## 🚀 When to Use
-- **📡 Data Syncing**: Sending offline records to your server.
-- **📂 File Processing**: Compressing or encrypting local files.
-- **☁️ Media Uploads**: Ensuring a user's video actually finishes uploading.
-- **💾 State Updates**: Finalizing critical database transactions.
+## When to Use
+- **Data Syncing**: Sending offline records to your server.
+- **File Processing**: Compressing or encrypting local files.
+- **Media Uploads**: Ensuring a user's video actually finishes uploading.
+- **State Updates**: Finalizing critical database transactions.
 
 ---
 
-## 📦 Step-by-Step Installation
+## Step-by-Step Installation
 
 ### 1. Add to dependencies
 Add this to your `pubspec.yaml`:
@@ -68,7 +68,7 @@ dependencies:
 ### 2. Platform Setup (REQUIRED)
 You **must** configure the native layer for the guard to hold. 
 
-#### 🤖 Android Configuration
+#### Android Configuration
 Open `android/app/src/main/AndroidManifest.xml`:
 1.  **Add Permissions** (outside `<application>`):
     ```xml
@@ -85,7 +85,7 @@ Open `android/app/src/main/AndroidManifest.xml`:
     </service>
     ```
 
-#### 🍎 iOS Configuration
+#### iOS Configuration
 1.  **Xcode Capabilities**: Enable **Background Modes** and check `Background fetch` & `Background processing`.
 2.  **Info.plist**: Register the task identifier:
     ```xml
@@ -97,7 +97,7 @@ Open `android/app/src/main/AndroidManifest.xml`:
 
 ---
 
-## 💡 Full Copy-Paste Example
+## Full Copy-Paste Example
 A complete `main.dart` showing a button that triggers a protected task.
 
 ```dart
@@ -116,7 +116,7 @@ class GuardExample extends StatelessWidget {
   // 2. This function triggers the protection
   Future<void> _triggerSecureTask() async {
     try {
-      // 🛡️ The 'Guard' boots here. 
+      // The 'Guard' boots here. 
       // After this call, you can swipe the app away and the task will continue.
       await LifecycleGuard.runSecureTask(
         id: "sync_records_001",
@@ -138,7 +138,7 @@ class GuardExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('🛡️ lifecycle_guard Demo')),
+      appBar: AppBar(title: const Text('lifecycle_guard Demo')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -169,10 +169,10 @@ class GuardExample extends StatelessWidget {
 
 ---
 
-## 🏗️ Platform-Specific Full Examples
+## Platform-Specific Full Examples
 If you want to target a specific platform directly, you can use these full-code snippets.
 
-### 🤖 Android Implementation (Full `main.dart`)
+### Android Implementation (Full main.dart)
 This uses the Android-specific package to trigger a Foreground Service.
 
 ```dart
@@ -194,7 +194,7 @@ class AndroidGuardExample extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            // 🛡️ Triggers Android-specific Foreground Service (dataSync)
+            // Triggers Android-specific Foreground Service (dataSync)
             await LifecycleGuardAndroid().runSecureTask(
               id: "android_backup_sync",
               payload: {"priority": "max"},
@@ -208,7 +208,7 @@ class AndroidGuardExample extends StatelessWidget {
 }
 ```
 
-### 🍎 iOS Implementation (Full `main.dart`)
+### iOS Implementation (Full main.dart)
 This uses the iOS-specific package to schedule a BGTask.
 
 ```dart
@@ -230,7 +230,7 @@ class IosGuardExample extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            // 🛡️ Registers an iOS-specific BGProcessingTask
+            // Registers an iOS-specific BGProcessingTask
             await LifecycleGuardIos().runSecureTask(
               id: "ios_background_upload",
               payload: {"retries": 3},
@@ -246,31 +246,31 @@ class IosGuardExample extends StatelessWidget {
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 ```mermaid
 graph TD
-    subgraph App ["📱 Flutter Application"]
+    subgraph App ["Flutter Application"]
         A["<b>runSecureTask()</b><br/><i>Initiate critical task</i>"]
     end
 
-    subgraph Bridge ["🌉 Platform Bridge"]
+    subgraph Bridge ["Platform Bridge"]
         B{"OS Detection"}
     end
 
-    subgraph Guard ["🛡️ Lifecycle Guard Layer"]
-        subgraph Android ["🤖 Android"]
+    subgraph Guard ["Lifecycle Guard Layer"]
+        subgraph Android ["Android"]
             C["<b>LifecycleService</b><br/><i>Foreground + dataSync</i>"]
         end
-        subgraph iOS ["🍎 iOS"]
+        subgraph iOS ["iOS"]
             D["<b>BGTaskScheduler</b><br/><i>BGProcessingTask</i>"]
         end
     end
 
-    subgraph Survival ["🚀 Survival Matrix"]
-        E["✅ App Swipe Survival"]
-        F["✅ Doze Mode Protection"]
-        G["✅ Battery Save Compliance"]
+    subgraph Survival ["Survival Matrix"]
+        E["App Swipe Survival"]
+        F["Doze Mode Protection"]
+        G["Battery Save Compliance"]
     end
 
     A --> B
@@ -290,7 +290,7 @@ graph TD
 
 ---
 
-## 📄 License
+## License
 
 BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
 
@@ -298,6 +298,6 @@ BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_gua
 
 <div align="center">
 
-Built with ❤️ by [Crealify](https://anil-bhattarai.com.np) · Open to collaborate · PRs welcome
+Built by [Crealify](https://anil-bhattarai.com.np) · Open to collaborate · PRs welcome
 
 </div>

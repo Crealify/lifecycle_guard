@@ -229,12 +229,12 @@
                     <div class="light yellow"></div>
                     <div class="light green"></div>
                 </div>
-                <div class="terminal-title">flutter — iOS (iPhone 15 Pro)</div>
+                <div class="terminal-title">flutter -- iOS (iPhone 15 Pro)</div>
             </div>
             <div id="terminal" class="terminal-body">
                 <div class="log-line show"><span class="prompt">$</span> flutter run</div>
-                <div class="log-line show success">✓ App installed on iPhone 15 Pro</div>
-                <div class="log-line show">▶ User ready to test...</div>
+                <div class="log-line show success">[OK] App installed on iPhone 15 Pro</div>
+                <div class="log-line show">[INFO] User ready to test...</div>
             </div>
         </div>
     </div>
@@ -262,7 +262,7 @@
             btn.disabled = true;
             syncStatus.style.display = 'block';
             
-            addLog('▶ User taps "Start Background Sync"');
+            addLog('[USER] Taps "Start Background Sync"');
             
             setTimeout(() => {
                 addLog('<span class="prompt">[Flutter]</span> Starting mission-critical sync...');
@@ -276,14 +276,14 @@
 
             // Simulation: Termination
             setTimeout(() => {
-                addLog('<span class="error-msg">✖ App pushed to background & suspended</span>');
+                addLog('<span class="error-msg">[KILL] App pushed to background & suspended</span>');
                 document.body.style.opacity = '0.9';
             }, 4500);
 
             setTimeout(() => {
-                addLog('<span class="success">🛡️ Guard protecting execution window...</span>');
+                addLog('<span class="success">[GUARD] Protecting execution window...</span>');
                 addLog('<span class="prompt">[Flutter]</span> Uploading batch 2/5... (Active)');
-                addLog('<span class="success">✓ iOS Background processing PROTECTED.</span>');
+                addLog('<span class="success">[OK] iOS Background processing PROTECTED.</span>');
             }, 6000);
         }
     </script>

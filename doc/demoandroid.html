@@ -229,12 +229,12 @@
                     <div class="light yellow"></div>
                     <div class="light green"></div>
                 </div>
-                <div class="terminal-title">flutter — Android (Pixel 7 Pro)</div>
+                <div class="terminal-title">flutter -- Android (Pixel 7 Pro)</div>
             </div>
             <div id="terminal" class="terminal-body">
                 <div class="log-line show"><span class="prompt">$</span> flutter run</div>
-                <div class="log-line show success">✓ App installed on Pixel 7 Pro</div>
-                <div class="log-line show">▶ User ready to test...</div>
+                <div class="log-line show success">[OK] App installed on Pixel 7 Pro</div>
+                <div class="log-line show">[INFO] User ready to test...</div>
             </div>
         </div>
     </div>
@@ -262,7 +262,7 @@
             btn.disabled = true;
             syncStatus.style.display = 'block';
             
-            addLog('▶ User taps "Start Background Sync"');
+            addLog('[USER] Taps "Start Background Sync"');
             
             setTimeout(() => {
                 addLog('<span class="prompt">I/flutter:</span> Starting mission-critical sync...');
@@ -276,14 +276,14 @@
 
             // Simulation: Termination
             setTimeout(() => {
-                addLog('<span class="error-msg">✖ Process terminated by system (User Swipe)</span>');
+                addLog('<span class="error-msg">[KILL] Process terminated by system (User Swipe)</span>');
                 document.body.style.opacity = '0.9';
             }, 4500);
 
             setTimeout(() => {
-                addLog('<span class="success">🛡️ Guard detected termination. Keeping process alive.</span>');
+                addLog('<span class="success">[GUARD] Termination detected. Keeping process alive.</span>');
                 addLog('<span class="prompt">I/flutter:</span> Progress: 26% ... 27% ... (Resumed)');
-                addLog('<span class="success">✓ Background sync PROTECTED.</span>');
+                addLog('<span class="success">[OK] Background sync PROTECTED.</span>');
             }, 6000);
         }
     </script>

@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# 🤖 lifecycle_guard_android
+# lifecycle_guard_android
 
 **The bulletproof Android implementation for mission-critical background execution.**
 
@@ -16,22 +16,22 @@ This package ensures your background tasks survive termination on Android device
 
 ---
 
-## 🎬 Demo
+## Demo
 See how the Android Foreground Service keeps your task alive:
 
 ![Lifecycle Guard Android Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
-### 🕹️ [**Try the Android Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/demoandroid.html)
+### [**Try the Android Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/demoandroid.html)
 
 ---
 
-## 🚀 Why this package?
+## Why this package?
 Android is aggressive. When a user swipes your app away, the OS often kills your Dart Isolate, terminating all background tasks. 
 `lifecycle_guard_android` solves this by wrapping your task in an **Android Foreground Service** (type: `dataSync`), which has the highest survival priority on the platform.
 
 ---
 
-## ⚙️ Step-by-Step Installation (Detailed)
+## Step-by-Step Installation (Detailed)
 
 ### 1. Add Dependency
 Add this to your `pubspec.yaml`:
@@ -43,7 +43,7 @@ dependencies:
 ### 2. Configure AndroidManifest.xml
 Open `android/app/src/main/AndroidManifest.xml` and follow these three steps:
 
-#### 🔐 A. Add Permissions
+#### A. Add Permissions
 Add these *outside* the `<application>` tag:
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -51,7 +51,7 @@ Add these *outside* the `<application>` tag:
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
-#### 🛠️ B. Declare the Service
+#### B. Declare the Service
 Add this *inside* the `<application>` tag:
 ```xml
 <service
@@ -61,12 +61,12 @@ Add this *inside* the `<application>` tag:
 </service>
 ```
 
-#### 🔔 C. Notification Icon (Recommended)
+#### C. Notification Icon (Recommended)
 The foreground service shows a notification. To use a custom icon, ensure you have a drawable named `ic_launcher` or update the code in your implementation.
 
 ---
 
-## 💡 Full Example Code (Android-Ready)
+## Full Example Code (Android-Ready)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -82,7 +82,7 @@ class AndroidGuardDemo extends StatelessWidget {
   const AndroidGuardDemo({super.key});
 
   Future<void> _startAndroidTask() async {
-    // 🛡️ Start the Foreground Service
+    // Start the Foreground Service
     // This will show a persistent notification and keep the process alive
     await LifecycleGuardAndroid().runSecureTask(
       id: "sync_records_android",
@@ -108,18 +108,18 @@ class AndroidGuardDemo extends StatelessWidget {
 
 ---
 
-## 🦾 Features (Android)
-- **✅ Android 15+ Compliance**: Uses the required `dataSync` service type.
-- **✅ Battery Optimization Override**: Helps tasks survive Doze Mode.
-- **✅ Swipe-to-Kill Protection**: The service stays alive even if the user swipes the app away from the multitasking view.
+## Features (Android)
+- **Android 15+ Compliance**: Uses the required `dataSync` service type.
+- **Battery Optimization Override**: Helps tasks survive Doze Mode.
+- **Swipe-to-Kill Protection**: The service stays alive even if the user swipes the app away from the multitasking view.
 
 ---
 
-## 📄 License
+## License
 BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
 
 ---
 
 <div align="center">
-Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
+Built by [Crealify](https://anil-bhattarai.com.np)
 </div>

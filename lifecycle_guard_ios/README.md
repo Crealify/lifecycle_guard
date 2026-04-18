@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# 🍎 lifecycle_guard_ios
+# lifecycle_guard_ios
 
 **The robust iOS implementation for mission-critical background execution.**
 
@@ -16,22 +16,22 @@ This package ensures your background tasks get the execution time they need on i
 
 ---
 
-## 🎬 Demo
+## Demo
 See the iOS Background Task flow in action:
 
 ![Lifecycle Guard iOS Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
-### 🕹️ [**Try the iOS Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/iosdemo.html)
+### [**Try the iOS Interactive Demo**](https://htmlpreview.github.io/?https://github.com/Crealify/lifecycle_guard/blob/main/doc/iosdemo.html)
 
 ---
 
-## 🚀 The iOS Challenge
+## The iOS Challenge
 iOS is notoriously strict. When an app is swiped away or minimized, it is suspended almost instantly. Unlike Android, you cannot simply start a persistent "service."
 `lifecycle_guard_ios` utilizes Apple's **BGTaskScheduler** framework to request dedicated processing time from the kernel. This allows your app to finish critical work (like a database sync) even if the UI process has been suspended or terminated.
 
 ---
 
-## ⚙️ Step-by-Step Installation (Detailed)
+## Step-by-Step Installation (Detailed)
 
 ### 1. Add Dependency
 Add this to your `pubspec.yaml`:
@@ -61,7 +61,7 @@ Apple requires you to whitelist your background task identifiers. Open `ios/Runn
 
 ---
 
-## 💡 Full Example Code (Complete `main.dart`)
+## Full Example Code (Complete main.dart)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -79,7 +79,7 @@ class IOSGuardExample extends StatelessWidget {
   /// This function requests background processing time from iOS
   Future<void> _triggerIosTask() async {
     try {
-      // 🛡️ Register the task with BGTaskScheduler
+      // Register the task with BGTaskScheduler
       // iOS will then allocate a window for your task to run.
       await LifecycleGuardIos().runSecureTask(
         id: "ios_sync_001",
@@ -119,19 +119,19 @@ class IOSGuardExample extends StatelessWidget {
 
 ---
 
-## 🦾 iOS Specific Features
-- **✅ BGTaskScheduler Integration**: Follows the official Apple architecture for background work.
-- **✅ Isolate Protection**: Spawns a dedicated background Isolate to keep your Dart logic running.
-- **✅ Resource Management**: Automatically respects iOS system battery and data budgets.
-- **✅ Graceful Termination Handling**: Provides hooks to save state if iOS finally decides to reclaim resources.
+## iOS Specific Features
+- **BGTaskScheduler Integration**: Follows the official Apple architecture for background work.
+- **Isolate Protection**: Spawns a dedicated background Isolate to keep your Dart logic running.
+- **Resource Management**: Automatically respects iOS system battery and data budgets.
+- **Graceful Termination Handling**: Provides hooks to save state if iOS finally decides to reclaim resources.
 
 ---
 
-## 📄 License
+## License
 BSD 3-Clause License — see [LICENSE](https://github.com/Crealify/lifecycle_guard/blob/main/LICENSE) for details.
 
 ---
 
 <div align="center">
-Built with ❤️ by [Crealify](https://anil-bhattarai.com.np)
+Built by [Crealify](https://anil-bhattarai.com.np)
 </div>
