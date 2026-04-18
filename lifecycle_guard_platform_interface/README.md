@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# lifecycle_guard_platform_interface
+# ⚙️ lifecycle_guard_platform_interface
 
 **The common interface contract for mission-critical background execution.**
 
@@ -16,13 +16,20 @@ This package defines the standardized API that ensures `lifecycle_guard` works i
 
 ---
 
+## 🎬 Demo
+See the `lifecycle_guard` ecosystem in action:
+
+![Lifecycle Guard Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
+
+---
+
 ## 🚀 The Backbone of the Guard
 This is a **Platform Interface** package as defined by the [Federated Plugins](https://flutter.dev/to/federated-plugins) architecture. It serves as the single source of truth for the plugin's API, ensuring that whether you are on Android or iOS, the behavior remains consistent.
 
-### Why this package exists:
-1.  **Uniformity**: Every platform-specific guard (Android, iOS) is forced to implement the exact same methods.
-2.  **Safety**: Prevents runtime errors by providing a static fallback implementation.
-3.  **Community Driven**: Allows anyone to build a `lifecycle_guard_windows` or `lifecycle_guard_web` by simply extending this class.
+### 💎 Why this package exists:
+*   **🏗️ Uniformity**: Every platform-specific guard (Android, iOS) is forced to implement the exact same methods.
+*   **🛡️ Safety**: Prevents runtime errors by providing a static fallback implementation.
+*   **🌍 Community Driven**: Allows anyone to build a `lifecycle_guard_windows` or `lifecycle_guard_web` by simply extending this class.
 
 ---
 
@@ -30,7 +37,7 @@ This is a **Platform Interface** package as defined by the [Federated Plugins](h
 
 If you are building a new platform implementation for `lifecycle_guard`, you must extend the `LifecycleGuardPlatform` class.
 
-### Example Implementation Structure:
+### 📝 Example Implementation Structure:
 
 ```dart
 import 'package:lifecycle_guard_platform_interface/lifecycle_guard_platform_interface.dart';

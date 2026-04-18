@@ -31,6 +31,10 @@ class LifecycleGuardPlugin: FlutterPlugin, MethodCallHandler {
             // Android 15+ requirement: startForegroundService
             ContextCompat.startForegroundService(context, intent)
             result.success(null)
+        } else if (call.method == "stopSecureTask") {
+            val intent = Intent(context, LifecycleService::class.java)
+            context.stopService(intent)
+            result.success(null)
         } else {
             result.notImplemented()
         }

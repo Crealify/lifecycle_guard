@@ -7,11 +7,16 @@ homepage: https://anil-bhattarai.com.np
 topics:
   - background-task
   - background-execution
+  - foreground-service
   - data-sync
   - flutter
   - offline-first
   - isolate
   - dart
+
+screenshots:
+  - description: 'Lifecycle Guard Active Status'
+    path: doc/guard_icon.png
 
 environment:
   sdk: ^3.11.4
@@ -24,6 +29,21 @@ dependencies:
   lifecycle_guard_android: ^1.0.1
   lifecycle_guard_ios: ^1.0.1
 
+# These overrides ensure the IDE uses local source during development
+# They are ignored by pub.dev for consumers
+dependency_overrides:
+  lifecycle_guard_platform_interface:
+    path: ../lifecycle_guard_platform_interface
+  lifecycle_guard_android:
+    path: ../lifecycle_guard_android
+  lifecycle_guard_ios:
+    path: ../lifecycle_guard_ios
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
 flutter:
   plugin:
     platforms:
@@ -31,9 +51,3 @@ flutter:
         default_package: lifecycle_guard_android
       ios:
         default_package: lifecycle_guard_ios
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
-

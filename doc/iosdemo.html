@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="guard_icon.png">
+    <title>iOS Lifecycle Guard | Interactive Demo</title>
+    <style>
+        :root {
+            --primary: #007aff;
+            --bg: #f2f2f7;
+            --card: #ffffff;
+            --border: #d1d1d6;
+            --text: #000000;
+            --text-muted: #8e8e93;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .phone {
+            width: 320px;
+            height: 640px;
+            background: #fff;
+            border: 12px solid #000;
+            border-radius: 50px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .screen {
+            flex: 1;
+            background: var(--bg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            background: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .ios-badge {
+            font-size: 9px;
+            background: #007aff;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .hero-text {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .status-card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .status-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .status-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .ios-banner {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100;
+        }
+
+        .ios-banner.show {
+            top: 20px;
+        }
+
+        .app-icon {
+            width: 32px;
+            height: 32px;
+            background: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-text h4 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .banner-text p {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 32px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            z-index: 200;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .ios-terminal {
+            background: #f2f2f7;
+            border: 1px solid #d1d1d6;
+            padding: 16px;
+            border-radius: 14px;
+            width: 100%;
+            font-family: 'SF Mono', 'Courier', monospace;
+            font-size: 11px;
+            color: #007aff;
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 8px;
+            display: none;
+        }
+
+        .active .pulse-dot {
+            display: inline-block;
+            animation: ios-pulse 1.5s infinite;
+        }
+
+        @keyframes ios-pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div id="banner" class="ios-banner">
+            <div class="app-icon">
+                <img src="guard_icon.png" width="20" alt="Guard">
+            </div>
+            <div class="banner-text">
+                <h4>Lifecycle Guard</h4>
+                <p>Background Processing: Active</p>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">
+                <div class="logo-box">
+                    <img src="guard_icon.png" width="26" alt="Guard">
+                </div>
+                <div>
+                    <h1>iOS Guard</h1>
+                    <span class="ios-badge">BGTask Ready</span>
+                </div>
+            </div>
+
+            <div class="hero-text">
+                Apple background scheduler integration.
+            </div>
+
+            <div id="card" class="status-card">
+                <p class="status-label">API: BGTaskScheduler</p>
+                <div style="display: flex; align-items: center;">
+                    <span class="pulse-dot"></span>
+                    <p id="status" class="status-value">Ready</p>
+                </div>
+            </div>
+
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                Simulating how Lifecycle Guard uses <b>Background Processing Tasks</b> to request additional execution time from iOS.
+            </p>
+
+            <button id="btn" class="btn" onclick="startDemo()">Schedule iOS Task</button>
+        </div>
+
+        <div id="overlay" class="overlay">
+            <h2 style="font-size: 24px; margin-bottom: 12px; letter-spacing: -0.5px;">App Suspended</h2>
+            <p style="color: #666; font-size: 15px;">Application pushed to background.</p>
+            
+            <div class="ios-terminal">
+                [System] App moved to background...<br>
+                [Guard] beginBackgroundTaskWithName...<br>
+                [Status] ID: 12948 Active<br>
+                [Work] sync_ios_data: CONTINUING ✅<br>
+                [Timer] 180s remaining...
+            </div>
+
+            <button class="btn" style="margin-top: 40px; width: 100%; background: #000;" onclick="location.reload()">Restart iOS Demo</button>
+        </div>
+    </div>
+
+    <script>
+        function startDemo() {
+            const btn = document.getElementById('btn');
+            const card = document.getElementById('card');
+            const status = document.getElementById('status');
+            const banner = document.getElementById('banner');
+            
+            btn.disabled = true;
+            btn.innerText = 'Task Scheduled...';
+            card.classList.add('active');
+            status.innerText = 'Protection Window Open';
+            
+            setTimeout(() => {
+                banner.classList.add('show');
+            }, 800);
+
+            setTimeout(() => {
+                document.getElementById('overlay').classList.add('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

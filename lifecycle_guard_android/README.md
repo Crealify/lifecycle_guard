@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# lifecycle_guard_android
+# 🤖 lifecycle_guard_android
 
 **The bulletproof Android implementation for mission-critical background execution.**
 
@@ -13,6 +13,13 @@ This package ensures your background tasks survive termination on Android device
 [![Platform](https://img.shields.io/badge/Platform-Android-green)](https://pub.dev/packages/lifecycle_guard)
 
 </div>
+
+---
+
+## 🎬 Demo
+See how the Android Foreground Service keeps your task alive:
+
+![Lifecycle Guard Android Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
 ---
 
@@ -34,7 +41,7 @@ dependencies:
 ### 2. Configure AndroidManifest.xml
 Open `android/app/src/main/AndroidManifest.xml` and follow these three steps:
 
-#### A. Add Permissions
+#### 🔐 A. Add Permissions
 Add these *outside* the `<application>` tag:
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -42,7 +49,7 @@ Add these *outside* the `<application>` tag:
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
-#### B. Declare the Service
+#### 🛠️ B. Declare the Service
 Add this *inside* the `<application>` tag:
 ```xml
 <service
@@ -52,7 +59,7 @@ Add this *inside* the `<application>` tag:
 </service>
 ```
 
-#### C. Notification Icon (Optional but Recommended)
+#### 🔔 C. Notification Icon (Recommended)
 The foreground service shows a notification. To use a custom icon, ensure you have a drawable named `ic_launcher` or update the code in your implementation.
 
 ---
@@ -100,9 +107,9 @@ class AndroidGuardDemo extends StatelessWidget {
 ---
 
 ## 🦾 Features (Android)
-- **Android 15+ Compliance**: Uses the required `dataSync` service type.
-- **Battery Optimization Override**: Helps tasks survive Doze Mode.
-- **Swipe-to-Kill Protection**: The service stays alive even if the user swipes the app away from the multitasking view.
+- **✅ Android 15+ Compliance**: Uses the required `dataSync` service type.
+- **✅ Battery Optimization Override**: Helps tasks survive Doze Mode.
+- **✅ Swipe-to-Kill Protection**: The service stays alive even if the user swipes the app away from the multitasking view.
 
 ---
 

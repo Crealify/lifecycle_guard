@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="160" alt="lifecycle_guard Logo">
 
-# lifecycle_guard
+# 🛡️ lifecycle_guard
 
 **The bulletproof Flutter plugin for mission-critical background execution.**
 
@@ -16,6 +16,13 @@ Stop losing data when Android or iOS aggressively kills your app.
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)](#⚙️-platform-specific-setup-required)
 
 </div>
+
+---
+
+## 🎬 Demo
+Watch how `lifecycle_guard` protects your tasks even after app termination:
+
+![Lifecycle Guard Full Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
 ---
 
@@ -42,10 +49,10 @@ By bridging to native Foreground Services (Android) and Background Processing Ta
 - **✅ Developer Friendly**: 100% type-safe API with simple `payload` support.
 
 ## 🚀 When to Use
-- **Data Syncing**: Sending offline records to your server.
-- **File Processing**: Compressing or encrypting local files.
-- **Media Uploads**: Ensuring a user's video actually finishes uploading.
-- **State Updates**: Finalizing critical database transactions.
+- **📡 Data Syncing**: Sending offline records to your server.
+- **📂 File Processing**: Compressing or encrypting local files.
+- **☁️ Media Uploads**: Ensuring a user's video actually finishes uploading.
+- **💾 State Updates**: Finalizing critical database transactions.
 
 ---
 

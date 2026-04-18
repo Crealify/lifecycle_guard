@@ -1,0 +1,17 @@
+# Junk
+.idea/
+.vscode/
+*.log
+*.bak
+*.tmp
+.DS_Store
+
+# Build artifacts
+build/
+.dart_tool/
+.packages
+pubspec.lock
+
+# Documentation artifacts (keep if you want them on pub.dev, but exclude internal tools)
+doc/demo.html
+doc/lifecycle_guard_plugin_demo.mp4

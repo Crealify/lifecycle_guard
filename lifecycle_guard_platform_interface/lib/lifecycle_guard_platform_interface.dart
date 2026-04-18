@@ -13,9 +13,17 @@ abstract class LifecycleGuardPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  // The method every platform MUST implement
-  Future<void> startBackgroundSync(String taskId, Map<String, dynamic> data) {
-    throw UnimplementedError('startBackgroundSync() has not been implemented.');
+  /// The method every platform MUST implement to run a secure task
+  Future<void> runSecureTask({
+    required String id, 
+    Map<String, dynamic>? payload,
+  }) {
+    throw UnimplementedError('runSecureTask() has not been implemented.');
+  }
+
+  /// The method to stop the secure task and release resources
+  Future<void> stopSecureTask() {
+    throw UnimplementedError('stopSecureTask() has not been implemented.');
   }
 }
 
@@ -23,10 +31,18 @@ class MethodChannelLifecycleGuard extends LifecycleGuardPlatform {
   final methodChannel = const MethodChannel('lifecycle_guard');
 
   @override
-  Future<void> startBackgroundSync(String taskId, Map<String, dynamic> data) async {
+  Future<void> runSecureTask({
+    required String id, 
+    Map<String, dynamic>? payload,
+  }) async {
     await methodChannel.invokeMethod<void>('startBackgroundSync', {
-      'taskId': taskId,
-      'data': data,
+      'taskId': id,
+      'data': payload ?? {},
     });
+  }
+
+  @override
+  Future<void> stopSecureTask() async {
+    await methodChannel.invokeMethod<void>('stopSecureTask');
   }
 }

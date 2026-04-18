@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/logo.png" width="140" alt="lifecycle_guard Logo">
 
-# lifecycle_guard_ios
+# 🍎 lifecycle_guard_ios
 
 **The robust iOS implementation for mission-critical background execution.**
 
@@ -13,6 +13,13 @@ This package ensures your background tasks get the execution time they need on i
 [![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey)](https://pub.dev/packages/lifecycle_guard)
 
 </div>
+
+---
+
+## 🎬 Demo
+See the iOS Background Task flow in action:
+
+![Lifecycle Guard iOS Demo](https://raw.githubusercontent.com/Crealify/lifecycle_guard/main/doc/lifecycle_guard_plugin_demo.gif)
 
 ---
 
@@ -111,10 +118,10 @@ class IOSGuardExample extends StatelessWidget {
 ---
 
 ## 🦾 iOS Specific Features
-- **BGTaskScheduler Integration**: Follows the official Apple architecture for background work.
-- **Isolate Protection**: Spawns a dedicated background Isolate to keep your Dart logic running.
-- **Resource Management**: Automatically respects iOS system battery and data budgets.
-- **Graceful Termination Handling**: Provides hooks to save state if iOS finally decides to reclaim resources.
+- **✅ BGTaskScheduler Integration**: Follows the official Apple architecture for background work.
+- **✅ Isolate Protection**: Spawns a dedicated background Isolate to keep your Dart logic running.
+- **✅ Resource Management**: Automatically respects iOS system battery and data budgets.
+- **✅ Graceful Termination Handling**: Provides hooks to save state if iOS finally decides to reclaim resources.
 
 ---
 

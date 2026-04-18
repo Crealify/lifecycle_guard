@@ -105,28 +105,28 @@ packages:
       path: "../lifecycle_guard"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.1"
   lifecycle_guard_android:
     dependency: "direct main"
     description:
       path: "../lifecycle_guard_android"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.1"
   lifecycle_guard_ios:
     dependency: "direct main"
     description:
       path: "../lifecycle_guard_ios"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.1"
   lifecycle_guard_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../lifecycle_guard_platform_interface"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.1"
   lints:
     dependency: transitive
     description:

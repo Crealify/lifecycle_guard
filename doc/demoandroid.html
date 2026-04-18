@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="guard_icon.png">
-    <title>Lifecycle Guard | Interactive Demo</title>
+    <title>Android Lifecycle Guard | Interactive Demo</title>
     <style>
         :root {
-            --primary: #58a6ff;
-            --secondary: #3fb950;
-            --bg: #090c12;
+            --primary: #3fb950;
+            --bg: #0b0e14;
             --card: #161b22;
             --border: #30363d;
             --text: #e6edf3;
@@ -20,7 +19,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
@@ -37,10 +36,10 @@
             width: 320px;
             height: 640px;
             background: #000;
-            border: 8px solid #1f2937;
-            border-radius: 40px;
+            border: 12px solid #1a1c1e;
+            border-radius: 48px;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -62,30 +61,28 @@
         }
 
         .logo-box {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #1a73e8, #58a6ff);
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            background: #3fb950;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .logo-box img {
-            width: 24px;
-            height: 24px;
-        }
-
         h1 {
             font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-weight: 700;
         }
 
-        .author {
-            font-size: 11px;
+        .android-tag {
+            font-size: 10px;
+            background: rgba(63, 185, 80, 0.2);
             color: var(--primary);
-            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
         .hero-text {
@@ -101,18 +98,16 @@
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .status-card.active {
             border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+            box-shadow: 0 0 20px rgba(63, 185, 80, 0.1);
         }
 
         .status-label {
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
             color: var(--text-muted);
             margin-bottom: 4px;
         }
@@ -123,78 +118,71 @@
             color: var(--text-muted);
         }
 
-        .status-card.active .status-value {
+        .active .status-value {
             color: var(--primary);
         }
 
         .btn {
-            background: #1f6feb;
-            color: white;
+            background: var(--primary);
+            color: #000;
             border: none;
             padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
+            border-radius: 24px;
+            font-weight: 800;
             font-size: 14px;
             cursor: pointer;
-            transition: transform 0.2s;
             margin-top: auto;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
         }
 
         .notification {
             position: absolute;
             top: -100px;
-            left: 12px;
-            right: 12px;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 12px 16px;
+            left: 8px;
+            right: 8px;
+            background: #1f1f1f;
+            border-radius: 24px;
+            padding: 16px;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 100;
         }
 
         .notification.show {
-            top: 40px;
+            top: 16px;
         }
 
         .notif-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--primary);
-            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            background: #3fb950;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .notif-content h4 {
-            font-size: 12px;
-            margin-bottom: 2px;
+            font-size: 13px;
+            color: #fff;
         }
 
         .notif-content p {
-            font-size: 10px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: #aaa;
         }
 
         .overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 32px;
-            text-align: center;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s;
@@ -206,17 +194,17 @@
             pointer-events: all;
         }
 
-        .swipe-hint {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 120px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+        .terminal {
+            background: #000;
+            border: 1px solid #333;
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #3fb950;
+            margin-top: 32px;
+            text-align: left;
         }
 
         .pulse {
@@ -226,16 +214,16 @@
             border-radius: 50%;
             margin-right: 8px;
             display: none;
+            animation: pulse-ring 1.25s infinite;
         }
 
         .active .pulse {
             display: inline-block;
-            animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
         }
 
         @keyframes pulse-ring {
-            0% { transform: scale(.33); }
-            80%, 100% { opacity: 0; }
+            0% { transform: scale(.5); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
     </style>
 </head>
@@ -243,60 +231,57 @@
     <div class="phone">
         <div id="notif" class="notification">
             <div class="notif-icon">
-                <img src="guard_icon.png" width="16" alt="Guard">
+                <img src="guard_icon.png" width="18" alt="Guard">
             </div>
             <div class="notif-content">
-                <h4>Lifecycle Guard | Guarding Logs</h4>
-                <p>Securing task: sync_offline_db</p>
+                <h4>Lifecycle Guard | Android Service</h4>
+                <p>Task: foreground_sync_active</p>
             </div>
         </div>
 
         <div class="screen">
             <div class="header">
                 <div class="logo-box">
-                    <img src="guard_icon.png" alt="Guard">
+                    <img src="guard_icon.png" width="24" alt="Guard">
                 </div>
                 <div>
-                    <h1>lifecycle_guard</h1>
-                    <p class="author">by Crealify</p>
+                    <h1>Android Guard</h1>
+                    <span class="android-tag">v15 Compliant</span>
                 </div>
             </div>
 
             <div class="hero-text">
-                Background tasks survive. Always.
+                Foreground protection for Android 15.
             </div>
 
             <div id="card" class="status-card">
-                <p class="status-label">Engine Status</p>
+                <p class="status-label">Service Type: dataSync</p>
                 <div style="display: flex; align-items: center;">
                     <span class="pulse"></span>
-                    <p id="status" class="status-value">Idle</p>
+                    <p id="status" class="status-value">Ready to guard</p>
                 </div>
             </div>
 
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-                Even if you swipe this app away from memory, the Guard layer ensures your background work completes.
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                This demo simulates how Lifecycle Guard uses a <b>Foreground Service</b> to protect your work when the system attempts to kill the process.
             </p>
 
-            <button id="btn" class="btn" onclick="startDemo()">Start Background Sync</button>
+            <button id="btn" class="btn" onclick="startDemo()">Activate Android Guard</button>
         </div>
 
         <div id="overlay" class="overlay">
-            <h2 style="font-size: 24px; margin-bottom: 12px;">App Terminated!</h2>
-            <p style="color: var(--text-muted);">Process killed by user swipe.</p>
+            <h2 style="color: #fff; margin-bottom: 8px;">Process Killed!</h2>
+            <p style="color: #888; font-size: 14px;">User swiped app from Recents.</p>
             
-            <div style="margin-top: 48px; text-align: left; width: 100%; font-family: monospace; font-size: 12px; color: var(--secondary);">
-                > Guard detected termination...<br>
-                > Activating native bridge...<br>
-                > Resuming task: sync_offline_db...<br>
-                > Status: PROTECTED ✅
+            <div class="terminal">
+                > System: Activity killed.<br>
+                > Guard: Service promoted to Foreground.<br>
+                > Type: dataSync (Android 15+)<br>
+                > Sync status: CONTINUING... ⏳<br>
+                > Integrity: VERIFIED ✅
             </div>
 
-            <button class="btn" style="margin-top: 48px; background: var(--card); border: 1px solid var(--border);" onclick="resetDemo()">Restart Simulation</button>
-        </div>
-        
-        <div id="swipe" class="swipe-hint" style="display: none;">
-            ☝️ Swipe app to test Guard
+            <button class="btn" style="margin-top: 40px; width: 100%; background: #222; color: #fff;" onclick="location.reload()">Reset Android Demo</button>
         </div>
     </div>
 
@@ -308,23 +293,17 @@
             const notif = document.getElementById('notif');
             
             btn.disabled = true;
-            btn.innerText = 'Guard Running...';
+            btn.innerText = 'Service Guarding...';
             card.classList.add('active');
-            status.innerText = 'Lifecycle Guard: Active log protection...';
+            status.innerText = 'Foreground Sync Active';
             
-            // Show notification after a brief delay
             setTimeout(() => {
                 notif.classList.add('show');
             }, 800);
 
-            // Simulate "User Swipes App" after 3 seconds
             setTimeout(() => {
                 document.getElementById('overlay').classList.add('show');
             }, 4000);
-        }
-
-        function resetDemo() {
-            location.reload();
         }
     </script>
 </body>

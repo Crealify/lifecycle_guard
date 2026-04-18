@@ -41,6 +41,16 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+dependency_overrides:
+  lifecycle_guard:
+    path: ../lifecycle_guard
+  lifecycle_guard_platform_interface:
+    path: ../lifecycle_guard_platform_interface
+  lifecycle_guard_android:
+    path: ../lifecycle_guard_android
+  lifecycle_guard_ios:
+    path: ../lifecycle_guard_ios
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

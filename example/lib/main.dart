@@ -96,23 +96,38 @@ class _HomeScreenState extends State<HomeScreen>
       if (!mounted) return;
       
       setState(() {
-        _statusText = '✅ Task dispatched successfully!';
+        _statusText = '🛡️ Guarding active! You can swipe app now.';
         _statusColor = const Color(0xFF3FB950);
       });
-      
-      // NOTE: In a real app, you would now perform your heavy work here
-      // (e.g., Dio/Http upload, local DB processing, etc.)
       
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _statusText = '❌ Error: ${e.toString()}';
         _statusColor = const Color(0xFFF85149);
+        _isRunning = false;
       });
-    } finally {
+      _pulseController.stop();
+    }
+  }
+
+  /// 🛑 STOP THE GUARD: Releasing Resources
+  Future<void> _stopTask() async {
+    try {
+      await LifecycleGuard.stopSecureTask();
+      
+      if (!mounted) return;
+      
+      setState(() {
+        _isRunning = false;
+        _statusText = '✅ Guard stopped. Resources released.';
+        _statusColor = const Color(0xFF8B949E);
+      });
       _pulseController.stop();
       _pulseController.reset();
-      setState(() => _isRunning = false);
+      
+    } catch (e) {
+      debugPrint("Error stopping guard: $e");
     }
   }
 
@@ -213,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      '1. Click the blue button below\n2. Swipe your app away immediately\n3. Check your console/logs: the task is still running!',
+                      '1. Click Start Secure Task\n2. Swipe your app away immediately\n3. The background sync continues uninterrupted!',
                       style: TextStyle(fontSize: 13, color: Color(0xFF8B949E), height: 1.5),
                     ),
                   ],
@@ -282,30 +297,45 @@ class _HomeScreenState extends State<HomeScreen>
 
               const SizedBox(height: 16),
 
-              // Start Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isRunning ? null : _startTask,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1F6FEB),
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: const Color(0xFF21262D),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // Action Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _isRunning ? null : _startTask,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1F6FEB),
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor: const Color(0xFF21262D),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        _isRunning ? '🛡️ Guard Active' : '▶  Start Task',
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
-                  child: Text(
-                    _isRunning
-                        ? '🛡️ Guard Active...'
-                        : '▶  Start Secure Task',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                  if (_isRunning) ...[
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _stopTask,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: const Color(0xFFF85149).withValues(alpha: 0.5)),
+                          foregroundColor: const Color(0xFFF85149),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('🛑 Stop Guard'),
+                      ),
                     ),
-                  ),
-                ),
+                  ],
+                ],
               ),
 
               const SizedBox(height: 32),
@@ -325,14 +355,13 @@ class _HomeScreenState extends State<HomeScreen>
                   border: Border.all(color: const Color(0xFF30363D)),
                 ),
                 child: const SelectableText(
-                  '// Trigger the guard\n'
-                  'await LifecycleGuard.runSecureTask(\n'
-                  '  id: "my_task_id",\n'
-                  '  payload: {"key": "value"},\n'
-                  ');',
+                  '// Start the protection\n'
+                  'await LifecycleGuard.runSecureTask(id: "sync");\n\n'
+                  '// Stop when finished\n'
+                  'await LifecycleGuard.stopSecureTask();',
                   style: TextStyle(
                     fontFamily: 'monospace',
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Color(0xFF79C0FF),
                     height: 1.6,
                   ),
